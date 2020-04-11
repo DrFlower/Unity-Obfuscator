@@ -5,7 +5,7 @@ using Mono.Cecil;
 
 namespace Flower.UnityObfuscator
 {
-    public class ClassInfo
+    internal class ClassInfo
     {
 
         class FieldPair

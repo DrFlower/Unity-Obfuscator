@@ -10,7 +10,7 @@ using System;
 namespace Flower.UnityObfuscator
 {
 
-    public class ProcessObfuscator : IPreprocessBuild, IProcessScene, IPostprocessBuild
+    internal class ProcessObfuscator : IPreprocessBuild, IProcessScene, IPostprocessBuild
     {
         private static bool doObfuscate = false;
         private static bool hasObfuscated = false;
@@ -19,7 +19,6 @@ namespace Flower.UnityObfuscator
 
         public void OnPreprocessBuild(BuildTarget target, string path)
         {
-            if (target == BuildTarget.iOS)
                 doObfuscate = true;
         }
 

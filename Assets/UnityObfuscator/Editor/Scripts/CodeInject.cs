@@ -9,7 +9,7 @@ using System.IO;
 
 namespace Flower.UnityObfuscator
 {
-    public class CodeInject : Obfuscator
+    internal class CodeInject : Obfuscator
     {
         private Dictionary<string, string> codeInjectInfoDic = new Dictionary<string, string>();
         private List<string> injectMethodList = new List<string>();

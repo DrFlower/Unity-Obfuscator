@@ -7,7 +7,7 @@ using System;
 namespace Flower.UnityObfuscator
 {
     [CustomEditor(typeof(ObfuscatorConfig))]
-    public class ObfuscatorConfigEditor : Editor
+    internal class ObfuscatorConfigEditor : Editor
     {
         private static readonly float backgroundSpaceWidth = 5f;
         private GUIStyle box;
@@ -147,7 +147,7 @@ namespace Flower.UnityObfuscator
     }
 
 
-    public static class FxStyles
+    internal static class FxStyles
     {
         public static GUIStyle tickStyleRight;
         public static GUIStyle tickStyleLeft;

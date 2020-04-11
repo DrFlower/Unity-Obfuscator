@@ -5,7 +5,7 @@ using Mono.Cecil;
 
 namespace Flower.UnityObfuscator
 {
-    public abstract class Obfuscator
+    internal abstract class Obfuscator
     {
         //为true时只混特定范围，即ObfuscateList下的配置
         //为false时，除了白名单外都混，即WhiteList下的配置

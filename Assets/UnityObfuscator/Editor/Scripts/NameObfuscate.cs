@@ -6,7 +6,7 @@ using Mono.Cecil;
 
 namespace Flower.UnityObfuscator
 {
-    public class NameObfuscate : Obfuscator
+    internal class NameObfuscate : Obfuscator
     {
         protected static NameObfuscate _instance = null;
 

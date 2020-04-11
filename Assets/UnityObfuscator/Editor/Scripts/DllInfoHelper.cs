@@ -5,7 +5,7 @@ using Mono.Cecil;
 
 namespace Flower.UnityObfuscator
 {
-    public class DllInfoHelper
+    internal class DllInfoHelper
     {
         /// <summary>
         /// 获取types(TypeDefinition)的名字信息

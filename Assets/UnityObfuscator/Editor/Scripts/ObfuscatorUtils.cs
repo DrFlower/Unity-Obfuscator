@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Flower.UnityObfuscator
 {
-    public static class ObfuscatorUtils
+    internal static class ObfuscatorUtils
     {
         static System.Random random;
 

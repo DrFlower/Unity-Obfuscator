@@ -8,7 +8,7 @@ using System.IO;
 
 namespace Flower.UnityObfuscator
 {
-    public static class CodeObfuscator
+    internal static class CodeObfuscator
     {
         public static void DoObfuscate(string assemblyPath, int randomSeed, bool enableNameObfuscate, bool enableCodeInject,
             ObfuscateType nameObfuscateType, ObfuscateType codeInjectObfuscateType, int garbageMethodMultiplePerClass, int insertMethodCountPerMethod)

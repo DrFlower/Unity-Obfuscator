@@ -7,7 +7,7 @@ using Mono.Cecil;
 
 namespace Flower.UnityObfuscator
 {
-    public class WhiteList
+    internal class WhiteList
     {
         public static readonly char sperateChar = '|';
         public static readonly char nullChar = '*';

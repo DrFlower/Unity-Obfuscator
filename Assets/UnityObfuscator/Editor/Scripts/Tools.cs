@@ -8,7 +8,7 @@ using System;
 
 namespace Flower.UnityObfuscator
 {
-    public class Tools
+    internal class Tools
     {
         private static List<string> whiteListClassNameOnly = new List<string>();
         private static List<string> whiteListMethod = new List<string>();

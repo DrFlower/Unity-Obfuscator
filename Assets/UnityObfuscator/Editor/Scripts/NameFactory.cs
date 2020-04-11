@@ -9,7 +9,7 @@ using Random = System.Random;
 namespace Flower.UnityObfuscator
 {
 
-    public class NameFactory
+    internal class NameFactory
     {
         private class NameCollection
         {

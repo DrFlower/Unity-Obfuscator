@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Flower.UnityObfuscator
 {
-    public class ObfuscatorConfig : ScriptableObject
+    internal class ObfuscatorConfig : ScriptableObject
     {
         //随机种子
         public int randomSeed = 123;

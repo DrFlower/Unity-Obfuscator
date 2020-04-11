@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Flower.UnityObfuscator
 {
-    public enum NameType
+    internal enum NameType
     {
         NameSpace,
         Class,
@@ -14,7 +14,7 @@ namespace Flower.UnityObfuscator
         Other,
     }
 
-    public enum WhiteListType
+    internal enum WhiteListType
     {
         NameSpace,
         Class,
@@ -23,14 +23,14 @@ namespace Flower.UnityObfuscator
         Member
     }
 
-    public enum ObfuscateType
+    internal enum ObfuscateType
     {
         ParticularRange,
         WhiteList,
         Both,
     }
 
-    public class Const
+    internal class Const
     {
         //----------------------------------------------------------------------
         public static readonly string ConfigAssetPath = @"Assets/UnityObfuscator/Editor/ObfuscatorConfig.asset";
