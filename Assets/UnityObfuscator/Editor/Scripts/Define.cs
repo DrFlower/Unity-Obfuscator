@@ -17,6 +17,7 @@ namespace Flower.UnityObfuscator
     internal enum WhiteListType
     {
         NameSpace,
+        NameSpcaceNameOnly,
         Class,
         ClassNameOnly,
         Method,
@@ -37,6 +38,7 @@ namespace Flower.UnityObfuscator
 
         //白名单配置文件路径
         public static readonly string WhiteList_NameSpacePath = @"/UnityObfuscator/Editor/Res/WhiteList/WhiteList-{0}-NameSpace.txt";//名单内命名空间不混
+        public static readonly string WhiteList_NameSpaceNameOnlyPath = @"/UnityObfuscator/Editor/Res/WhiteList/WhiteList-{0}-NameSpaceNameOnly.txt";//名单内命名空间的类都混，命名空间的名字不混
         public static readonly string WhiteList_ClassPath = @"/UnityObfuscator/Editor/Res/WhiteList/WhiteList-{0}-Class.txt";//名单内类不混
         public static readonly string WhiteList_ClassNameOnlyPath = @"/UnityObfuscator/Editor/Res/WhiteList/WhiteList-{0}-ClassNameOnly.txt";//名单内的类的成员都混，类名不混
         public static readonly string WhiteList_MethodPath = @"/UnityObfuscator/Editor/Res/WhiteList/WhiteList-{0}-Method.txt";//名单内的方法不混
@@ -44,6 +46,7 @@ namespace Flower.UnityObfuscator
 
         //混淆范围配置文件路径
         public static readonly string ObfuscateList_NameSpacePath = @"/UnityObfuscator/Editor/Res/ObfuscateList/ObfuscateList-{0}-NameSpace.txt";//名单内的命名空间所有类和类成员都混
+        public static readonly string ObfuscateList_NameSpaceExceptNameSpaceNamePath = @"/UnityObfuscator/Editor/Res/ObfuscateList/ObfuscateList-{0}-NameSpaceExceptNameSpaceName.txt";//名单内命名空间的类都混，命名空间的名字不混
         public static readonly string ObfuscateList_ClassPath = @"/UnityObfuscator/Editor/Res/ObfuscateList/ObfuscateList-{0}-Class.txt";//名单内的类都混
         public static readonly string ObfuscateList_ClassExceptClassNamePath = @"/UnityObfuscator/Editor/Res/ObfuscateList/ObfuscateList-{0}-ClassExceptClassName.txt";//名单内的类的类成员都混，类名不混
         public static readonly string ObfuscateList_MethodPath = @"/UnityObfuscator/Editor/Res/ObfuscateList/ObfuscateList-{0}-Method.txt";//名单内的方法都混

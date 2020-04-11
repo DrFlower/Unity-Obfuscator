@@ -165,6 +165,16 @@ namespace Flower.UnityObfuscator
             return Check(strs, WhiteListType.NameSpace);
         }
 
+        public bool IsWhiteListNamespcaeNameOnly(string _namespace, bool checkEmpty = false)
+        {
+            if (string.IsNullOrEmpty(_namespace))
+            {
+                return checkEmpty;
+            }
+            string[] strs = _namespace.Split('.');
+            return Check(strs, WhiteListType.NameSpcaceNameOnly);
+        }
+
         public bool IsWhiteListClass(string className, string _namespace = null)
         {
 
@@ -237,7 +247,7 @@ namespace Flower.UnityObfuscator
 
                 string str = string.Format("{0}{1}{2}{3}{4}", _namespaceStr, sperateChar, _classNameStr, sperateChar, methodName);
 
-                if(injectMethod.Contains(str))
+                if (injectMethod.Contains(str))
                 {
                     //Debug.Log(str);
                     return true;

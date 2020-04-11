@@ -113,8 +113,8 @@ namespace Flower.UnityObfuscator
 
         protected virtual bool IsChangeNamespace(TypeDefinition t)
         {
-            bool inObfuscateList = obfuscateList.IsWhiteListNamespace(t.Namespace);
-            bool inWhiteList = whiteList.IsWhiteListNamespace(t.Namespace, true);
+            bool inObfuscateList = obfuscateList.IsWhiteListNamespace(t.Namespace) && !obfuscateList.IsWhiteListNamespcaeNameOnly(t.Namespace);
+            bool inWhiteList = whiteList.IsWhiteListNamespace(t.Namespace, true) || whiteList.IsWhiteListNamespcaeNameOnly(t.Namespace, true);
 
             return IsChange(inObfuscateList, inWhiteList);
         }
