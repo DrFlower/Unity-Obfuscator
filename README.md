@@ -130,7 +130,7 @@
 ## 垃圾代码库配置：
 （待完善）
 
-##混淆结果的验证：
+## 混淆结果的验证：
 ![ILSpy图片][2]
 可通过``ILSpy``等反编译软件验证混淆后的程序集
 以PC平台为例，Unity Build后的程序集位于目标目录/XX_Data/Managed文件夹中，Unity默认程序集为Assembly-CSharp
