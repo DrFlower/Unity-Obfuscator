@@ -2,30 +2,25 @@
 
 
 ## 简介
----
 - 这是一款基于Mono Cecil库对C#编译后程序集进行IL代码注入实现的Unity混淆插件
 - 混淆发生在编译后，开发过程无需关心
 - 此插件已在带Lua热更方案的商业MMO手游项目上验证过可行性
 
 
 ## 主要功能：
----
 1. 对命名空间、类、属性、字段的命名混淆
 2. 插入垃圾代码（完善中）
 3. 在原代码中插入对垃圾代码的调用
 
 ## 特色功能：
----
 1. 命名混淆支持词库抽取名字
 2. 支持随机种子，可实现重复Build后混淆结果一致
 3. 支持黑白名单，排除部分在混淆后不能正常工作的代码，确保项目正常运行
 
 ## 使用方法：
-----
 使用时请把UnityObfuscator文件夹放置到Unity工程Assets目录下，在Unity Editor中对Assets\UnityObfuscator\Editor\ObfuscatorConfig.asset文件进行配置，并针对项目具体情况对黑白名单进行配置，配置完后直接Build程序即可生效。
 
 ## 插件配置：
----
 ![ObfuscatorConfig图片][1]
 
  - Enable Code Obfuscator控制总混淆开关
@@ -35,7 +30,6 @@
  - 可控制生成垃圾方法数量和调用垃圾方法数量（谨慎设置，会对Build的速度以及程序运行速度产生影响，影响大小随垃圾代码库变化）
 
 ## 黑白名单配置：
----
 
 ### 模式说明
 提供黑名单、白名单、黑白名单混用3种模式。
@@ -118,21 +112,17 @@
 
 
 ## 垃圾代码库配置：
----
 （待完善）
 
 ##混淆结果的验证：
----
 ![ILSpy图片][2]
 可通过``ILSpy``等反编译软件验证混淆后的程序集
 以PC平台为例，Unity Build后的程序集位于目标目录/XX_Data/Managed文件夹中，Unity默认程序集为Assembly-CSharp
 
 ## Demo
----
 Demo链接：https://github.com/DrFlower/Unity-Obfuscator-demo
 
 ## TODO
----
 - [ ] 完善插入垃圾代码功能
 - [ ] 命名混淆支持随机字符
 - [ ] 支持多DLL
