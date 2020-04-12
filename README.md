@@ -57,10 +57,11 @@
 ### 配置文件
 配置文件位于Assets\UnityObfuscator\Editor\Res目录下
 
-    配置文件以``A-B-C``方式命名
-    A为ObfuscateList/WhiteList表示 黑名单/白名单
-    B为CodeInject/NameObfuscate表示该名单是控制 代码插入/名字混淆
-    C则表示此配置控制的 具体范围
+配置文件以**A-B-C**方式命名
+**A**为**ObfuscateList**/**WhiteList**表示 **黑名单**/**白名单**
+**B**为**CodeInject**/**NameObfuscate**表示该名单是控制 **代码插入**/**名字混淆**
+**C**则表示此配置控制的 **具体范围**
+
 
 > ObfuscateList``//黑名单``
 >> ObfuscateList-CodeInject-Class.txt &nbsp; ``//-``  
