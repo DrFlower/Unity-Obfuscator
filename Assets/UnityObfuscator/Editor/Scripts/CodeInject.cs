@@ -54,11 +54,11 @@ namespace Flower.UnityObfuscator
             Dictionary<WhiteListType, string> whiteListPathDic = new Dictionary<WhiteListType, string>();
             Dictionary<WhiteListType, string> obfuscateListPathDic = new Dictionary<WhiteListType, string>();
 
-            whiteListPathDic.Add(WhiteListType.NameSpace, string.Format(Const.WhiteList_NameSpacePath, Symbol));
+            whiteListPathDic.Add(WhiteListType.Namespace, string.Format(Const.WhiteList_NamespacePath, Symbol));
             whiteListPathDic.Add(WhiteListType.Class, string.Format(Const.WhiteList_ClassPath, Symbol));
             whiteListPathDic.Add(WhiteListType.Method, string.Format(Const.WhiteList_MethodPath, Symbol));
 
-            obfuscateListPathDic.Add(WhiteListType.NameSpace, string.Format(Const.ObfuscateList_NameSpacePath, Symbol));
+            obfuscateListPathDic.Add(WhiteListType.Namespace, string.Format(Const.ObfuscateList_NamespacePath, Symbol));
             obfuscateListPathDic.Add(WhiteListType.Class, string.Format(Const.ObfuscateList_ClassPath, Symbol));
             obfuscateListPathDic.Add(WhiteListType.Method, string.Format(Const.ObfuscateList_MethodPath, Symbol));
 
@@ -163,7 +163,7 @@ namespace Flower.UnityObfuscator
 
             foreach (TypeDefinition item in assembly.MainModule.Types)
             {
-                if (item.Namespace == Const.GarbageCode_NameSpace && item.Name == Const.GarbageCode_Type)
+                if (item.Namespace == Const.GarbageCode_Namespace && item.Name == Const.GarbageCode_Type)
                 {
                     return item;
                 }

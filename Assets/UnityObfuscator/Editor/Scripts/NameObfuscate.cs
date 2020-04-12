@@ -39,15 +39,15 @@ namespace Flower.UnityObfuscator
             Dictionary<WhiteListType, string> whiteListPathDic = new Dictionary<WhiteListType, string>();
             Dictionary<WhiteListType, string> obfuscateListPathDic = new Dictionary<WhiteListType, string>();
 
-            whiteListPathDic.Add(WhiteListType.NameSpace, string.Format(Const.WhiteList_NameSpacePath, Symbol));
-            whiteListPathDic.Add(WhiteListType.NameSpcaceNameOnly, string.Format(Const.WhiteList_NameSpaceNameOnlyPath, Symbol));
+            whiteListPathDic.Add(WhiteListType.Namespace, string.Format(Const.WhiteList_NamespacePath, Symbol));
+            whiteListPathDic.Add(WhiteListType.NameSpcaceNameOnly, string.Format(Const.WhiteList_NamespaceNameOnlyPath, Symbol));
             whiteListPathDic.Add(WhiteListType.Class, string.Format(Const.WhiteList_ClassPath, Symbol));
             whiteListPathDic.Add(WhiteListType.ClassNameOnly, string.Format(Const.WhiteList_ClassNameOnlyPath, Symbol));
             whiteListPathDic.Add(WhiteListType.Method, string.Format(Const.WhiteList_MethodPath, Symbol));
             whiteListPathDic.Add(WhiteListType.Member, string.Format(Const.WhiteList_MemberPath, Symbol));
 
-            obfuscateListPathDic.Add(WhiteListType.NameSpace, string.Format(Const.ObfuscateList_NameSpacePath, Symbol));
-            obfuscateListPathDic.Add(WhiteListType.NameSpcaceNameOnly, string.Format(Const.ObfuscateList_NameSpaceExceptNameSpaceNamePath, Symbol));
+            obfuscateListPathDic.Add(WhiteListType.Namespace, string.Format(Const.ObfuscateList_NamespacePath, Symbol));
+            obfuscateListPathDic.Add(WhiteListType.NameSpcaceNameOnly, string.Format(Const.ObfuscateList_NamespaceExceptNamespaceNamePath, Symbol));
             obfuscateListPathDic.Add(WhiteListType.Class, string.Format(Const.ObfuscateList_ClassPath, Symbol));
             obfuscateListPathDic.Add(WhiteListType.ClassNameOnly, string.Format(Const.ObfuscateList_ClassExceptClassNamePath, Symbol));
             obfuscateListPathDic.Add(WhiteListType.Method, string.Format(Const.ObfuscateList_MethodPath, Symbol));
@@ -211,7 +211,7 @@ namespace Flower.UnityObfuscator
             string spaceName = t.Namespace;
 
             if (IsChangeNamespace(t))
-                t.Namespace = NameFactory.Instance.GetRandomName(NameType.NameSpace, spaceName);
+                t.Namespace = NameFactory.Instance.GetRandomName(NameType.Namespace, spaceName);
 
         }
 

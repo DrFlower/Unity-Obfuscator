@@ -123,7 +123,7 @@ namespace Flower.UnityObfuscator
             {
                 switch (item.Key)
                 {
-                    case WhiteListType.NameSpace:
+                    case WhiteListType.Namespace:
                         foreach (var str in item.Value)
                         {
                             if (!check(str, 1))
@@ -162,7 +162,7 @@ namespace Flower.UnityObfuscator
                 return checkEmpty;
             }
             string[] strs = _namespace.Split('.');
-            return Check(strs, WhiteListType.NameSpace);
+            return Check(strs, WhiteListType.Namespace);
         }
 
         public bool IsWhiteListNamespcaeNameOnly(string _namespace, bool checkEmpty = false)
@@ -289,7 +289,7 @@ namespace Flower.UnityObfuscator
                     //};
 
 
-                    //if (whiteListType == WhiteListType.NameSpace)
+                    //if (whiteListType == WhiteListType.Namespace)
                     //{
                     //    if (func("MalbersAnimations") || func("UnityEngine") || func("Ricimi") || func("XftWeapon"))
                     //    {
