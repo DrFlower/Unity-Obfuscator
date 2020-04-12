@@ -1,8 +1,24 @@
 # Unity-Obfuscator
 
+## 目录
+
+- [简介](#简介)
+- [主要功能](#主要功能)
+- [特色功能](#特色功能)
+- [使用方法](#使用方法)
+- [插件配置](#插件配置)
+- [黑白名单配置](#黑白名单配置)
+    - [模式说明](#模式说明)
+    - [配置文件](#配置文件)
+    - [配置格式](#配置格式)
+    - [配置规则](#配置规则)
+- [垃圾代码库配置](#垃圾代码库配置)
+- [混淆结果的验证](#混淆结果的验证)
+- [Demo](#Demo)
+
 
 ## 简介
-- 这是一款基于Mono Cecil库对C#编译后程序集进行IL代码注入实现的Unity混淆插件
+- 这是一款基于Mono Cecil库对C#编译后程序集进行IL代码注入实现的轻量Unity混淆插件
 - 混淆发生在编译后，开发过程无需关心
 - 此插件已在带Lua热更方案的商业MMO手游项目上验证过可行性
 
@@ -47,26 +63,26 @@
     C则表示此配置控制的 具体范围
 
 > ObfuscateList``//黑名单``
->> ObfuscateList-CodeInject-Class.txt &nbsp; ``//-``
->> ObfuscateList-CodeInject-Method.txt &nbsp; ``//-``
->> ObfuscateList-CodeInject-Namespace.txt &nbsp; ``//-``
->> ObfuscateList-NameObfuscate-Class.txt &nbsp; ``//名单内的类（包括类名和类成员名）都会被混淆``
->> ObfuscateList-NameObfuscate-ClassExceptClassName.txt &nbsp; ``//名单内的类的类成员名会被混淆，但类名不混淆``
->> ObfuscateList-NameObfuscate-ClassMember.txt &nbsp; ``//名单内的类成员名会被混淆``
->> ObfuscateList-NameObfuscate-Method.txt &nbsp; ``//名单内的方法名会被混淆``
->> ObfuscateList-NameObfuscate-Namespace.txt &nbsp; ``//名单内命名空间里内容包括（命名空间名、类名、类成员名）都会被混淆``
->> ObfuscateList-NameObfuscate-NamespaceExceptNamespaceName.txt &nbsp; ``//名单内命名空间内容（包括类名、类成员名）都会被混淆，但命名空间名不混淆``
+>> ObfuscateList-CodeInject-Class.txt &nbsp; ``//-``  
+>> ObfuscateList-CodeInject-Method.txt &nbsp; ``//-``  
+>> ObfuscateList-CodeInject-Namespace.txt &nbsp; ``//-``  
+>> ObfuscateList-NameObfuscate-Class.txt &nbsp; ``//名单内的类（包括类名和类成员名）都会被混淆``  
+>> ObfuscateList-NameObfuscate-ClassExceptClassName.txt &nbsp; ``//名单内的类的类成员名会被混淆，但类名不混淆``  
+>> ObfuscateList-NameObfuscate-ClassMember.txt &nbsp; ``//名单内的类成员名会被混淆``  
+>> ObfuscateList-NameObfuscate-Method.txt &nbsp; ``//名单内的方法名会被混淆``  
+>> ObfuscateList-NameObfuscate-Namespace.txt &nbsp; ``//名单内命名空间里内容包括（命名空间名、类名、类成员名）都会被混淆``  
+>> ObfuscateList-NameObfuscate-NamespaceExceptNamespaceName.txt &nbsp;   ``//名单内命名空间内容（包括类名、类成员名）都会被混淆，但命名空间名不混淆``  
 
 > WhiteList``//白名单``
->> WhiteList-CodeInject-Class.txt &nbsp; ``//-``
->> WhiteList-CodeInject-Method.txt &nbsp; ``//-``
->> WhiteList-CodeInject-Namespace.txt &nbsp; ``//-``
->> WhiteList-NameObfuscate-Class.txt &nbsp; ``//名单内的类（包括类名和类成员）不混淆``
->> WhiteList-NameObfuscate-ClassMember.txt &nbsp; ``//名单内的类成员不混淆``
->> WhiteList-NameObfuscate-ClassNameOnly.txt &nbsp; ``//名单内的类的类名不混淆，但类成员混淆``
->> WhiteList-NameObfuscate-Method.txt &nbsp; ``//名单内的方法名不混淆``
->> WhiteList-NameObfuscate-NameSpace.txt &nbsp; ``//名单内的命名空间里内容（包括命名空间名、类名、类成员名）都不混淆``
->> WhiteList-NameObfuscate-NamespaceNameOnly.txt &nbsp; ``//名单内的命名空间的名字不混淆``
+>> WhiteList-CodeInject-Class.txt &nbsp; ``//-``  
+>> WhiteList-CodeInject-Method.txt &nbsp; ``//-``  
+>> WhiteList-CodeInject-Namespace.txt &nbsp; ``//-``  
+>> WhiteList-NameObfuscate-Class.txt &nbsp; ``//名单内的类（包括类名和类成员）不混淆``  
+>> WhiteList-NameObfuscate-ClassMember.txt &nbsp; ``//名单内的类成员不混淆``  
+>> WhiteList-NameObfuscate-ClassNameOnly.txt &nbsp; ``//名单内的类的类名不混淆，但类成员混淆``  
+>> WhiteList-NameObfuscate-Method.txt &nbsp; ``//名单内的方法名不混淆``  
+>> WhiteList-NameObfuscate-NameSpace.txt &nbsp; ``//名单内的命名空间里内容（包括命名空间名、类名、类成员名）都不混淆``  
+>> WhiteList-NameObfuscate-NamespaceNameOnly.txt &nbsp; ``//名单内的命名空间的名字不混淆``  
 
 ``以上类成员包括字段、属性、方法``
 
