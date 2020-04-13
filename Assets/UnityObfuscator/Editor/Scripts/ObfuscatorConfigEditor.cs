@@ -58,6 +58,8 @@ namespace Flower.UnityObfuscator
                     obfuscatorConfig.nameObfuscateType = (ObfuscateType)EditorGUILayout.Popup((int)obfuscatorConfig.nameObfuscateType, ObfuscateTypeStr);
                     EditorGUILayout.EndHorizontal();
                     GUILayout.Space(5f);
+                    obfuscatorConfig.useRandomChar = EditorGUILayout.ToggleLeft(" 使用随机字符命名", obfuscatorConfig.useRandomChar);
+                    GUILayout.Space(5f);
                     DrawRight();
                 }
 

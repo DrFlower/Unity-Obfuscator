@@ -14,6 +14,9 @@ namespace Flower.UnityObfuscator
         //启用代码混淆
         public bool enableCodeObfuscator;
 
+        //使用随机字符命名
+        public bool useRandomChar;
+
         //启用名字混淆
         public bool enableNameObfuscate;
         //启用垃圾代码插入

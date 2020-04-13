@@ -73,6 +73,7 @@ namespace Flower.UnityObfuscator
             @"./Library/ScriptAssemblies",
         };
 
+        public static readonly char[] randomCharArray = { 'a','b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 'b', 'b' };
         public static readonly string GarbageCode_Namespace = "GarbageCodeLib";
         public static readonly string GarbageCode_Type = "GarbageCode";
     }
