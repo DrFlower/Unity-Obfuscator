@@ -203,11 +203,11 @@ namespace Flower.UnityObfuscator
                     MethodDefinition targetMethod = new MethodDefinition(mName, mAttr, mRtTr);
                     t.Methods.Add(targetMethod);
                     targetMethod.DeclaringType = t;
-                    int garbageCodeSnippetIdx = ObfuscatorUtils.ObfuscateRandom.Next(1, garbageCodeSnippetTotal);
+                    int garbageCodeSnippetIdx = ObfuscatorHelper.ObfuscateRandom.Next(1, garbageCodeSnippetTotal);
                     MethodDefinition sourceMethod = garbageType.Methods[garbageCodeSnippetIdx];
                     while (sourceMethod.IsConstructor)
                     {
-                        garbageCodeSnippetIdx = ObfuscatorUtils.ObfuscateRandom.Next(0, garbageCodeSnippetTotal);
+                        garbageCodeSnippetIdx = ObfuscatorHelper.ObfuscateRandom.Next(0, garbageCodeSnippetTotal);
                         sourceMethod = garbageType.Methods[garbageCodeSnippetIdx];
                     }
                     string namespaceStr = string.IsNullOrEmpty(t.Namespace) ? (WhiteList.nullChar).ToString() : t.Namespace;
@@ -252,7 +252,7 @@ namespace Flower.UnityObfuscator
                     {
                         if (jnList.Count > 0)
                         {
-                            string mname = jnList[ObfuscatorUtils.ObfuscateRandom.Next(0, jnList.Count)];
+                            string mname = jnList[ObfuscatorHelper.ObfuscateRandom.Next(0, jnList.Count)];
                             var mdArr = t.Methods.Where(item => item.Name == mname);
                             foreach (var md in mdArr)
                             {
@@ -300,7 +300,7 @@ namespace Flower.UnityObfuscator
             }
             while (slotList.Count > LimitNum)
             {
-                slotList.RemoveAt(ObfuscatorUtils.ObfuscateRandom.Next(0, slotList.Count));
+                slotList.RemoveAt(ObfuscatorHelper.ObfuscateRandom.Next(0, slotList.Count));
             }
         }
 
@@ -313,7 +313,7 @@ namespace Flower.UnityObfuscator
             }
             else
             {
-                int rNum = ObfuscatorUtils.ObfuscateRandom.Next(0, 100);
+                int rNum = ObfuscatorHelper.ObfuscateRandom.Next(0, 100);
                 if (rNum > 50)
                 {
                     OpCode op = m.Body.Instructions[count - 2].OpCode;

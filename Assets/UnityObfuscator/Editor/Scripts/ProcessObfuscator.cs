@@ -19,7 +19,7 @@ namespace Flower.UnityObfuscator
 
         public void OnPreprocessBuild(BuildTarget target, string path)
         {
-                doObfuscate = true;
+            doObfuscate = true;
         }
 
         public void OnProcessScene(Scene scene)
@@ -76,11 +76,11 @@ namespace Flower.UnityObfuscator
         }
 
         public static void DoObfuscate(string assemblyDllPath, int randomSeed, bool switchNameObfuscate, bool switchCodeInject,
-            ObfuscateType nameObfuscateType, ObfuscateType codeInjectObfuscateType,
+            ObfuscateType nameObfuscateType, ObfuscateType codeInjectObfuscateType, ObfuscateNameType obfuscateNameType,
             int garbageMethodMultiplePerClass, int insertMethodCountPerMethod)
         {
             CodeObfuscator.DoObfuscate(assemblyDllPath, randomSeed, switchNameObfuscate, switchCodeInject,
-                nameObfuscateType, codeInjectObfuscateType, garbageMethodMultiplePerClass, insertMethodCountPerMethod);
+                nameObfuscateType, codeInjectObfuscateType, obfuscateNameType, garbageMethodMultiplePerClass, insertMethodCountPerMethod);
         }
 
 
@@ -105,10 +105,11 @@ namespace Flower.UnityObfuscator
             bool enableCodeInject = obfuscatorConfig.enableCodeInject;
             ObfuscateType nameObfuscateType = obfuscatorConfig.nameObfuscateType;
             ObfuscateType codeInjectObfuscateType = obfuscatorConfig.codeInjectType;
+            ObfuscateNameType obfuscateNameType = obfuscatorConfig.obfuscateNameType;
             int garbageMethodMultiplePerClass = obfuscatorConfig.GarbageMethodMultiplePerClass;
             int insertMethodCountPerMethod = obfuscatorConfig.InsertMethodCountPerMethod;
 
-            DoObfuscate(assemblyPath, randomSeed, enableNameObfuscate, enableCodeInject, nameObfuscateType, codeInjectObfuscateType, garbageMethodMultiplePerClass, insertMethodCountPerMethod);
+            DoObfuscate(assemblyPath, randomSeed, enableNameObfuscate, enableCodeInject, nameObfuscateType, codeInjectObfuscateType, obfuscateNameType, garbageMethodMultiplePerClass, insertMethodCountPerMethod);
         }
 
 

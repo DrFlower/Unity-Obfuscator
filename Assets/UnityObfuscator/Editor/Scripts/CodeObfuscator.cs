@@ -11,7 +11,7 @@ namespace Flower.UnityObfuscator
     internal static class CodeObfuscator
     {
         public static void DoObfuscate(string assemblyPath, int randomSeed, bool enableNameObfuscate, bool enableCodeInject,
-            ObfuscateType nameObfuscateType, ObfuscateType codeInjectObfuscateType, int garbageMethodMultiplePerClass, int insertMethodCountPerMethod)
+            ObfuscateType nameObfuscateType, ObfuscateType codeInjectObfuscateType, ObfuscateNameType obfuscateNameType, int garbageMethodMultiplePerClass, int insertMethodCountPerMethod)
         {
             if (Application.isPlaying || EditorApplication.isCompiling)
             {
@@ -41,10 +41,10 @@ namespace Flower.UnityObfuscator
             }
             try
             {
-                ObfuscatorUtils.Init(randomSeed);
+                ObfuscatorHelper.Init(randomSeed);
                 NameObfuscate.Instance.Init(nameObfuscateType);
                 CodeInject.Instance.Init(codeInjectObfuscateType, garbageMethodMultiplePerClass, insertMethodCountPerMethod);
-                NameFactory.Instance.Load();
+                NameFactory.Instance.Load(obfuscateNameType);
 
                 var module = assembly.MainModule;
 

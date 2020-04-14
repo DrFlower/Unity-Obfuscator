@@ -19,6 +19,8 @@ namespace Flower.UnityObfuscator
 
             private Random random;
 
+            public static ObfuscateNameType ObfuscateNameType { get; set; }
+
             private NameType nameType;
 
             public NameType NameType
@@ -68,17 +70,24 @@ namespace Flower.UnityObfuscator
 
             public string GetAName(bool removeFormLib = true)
             {
-                string newName = string.Empty;
-                if (nameList.Count <= 0)
+                if (ObfuscateNameType == ObfuscateNameType.NameList)
                 {
-                    throw new System.Exception("Not enough random name");
-                }
+                    string newName = string.Empty;
+                    if (nameList.Count <= 0)
+                    {
+                        throw new System.Exception("Not enough random name");
+                    }
 
-                int index = random.Next(0, nameList.Count);
-                newName = nameList[index];
-                if (removeFormLib)
-                    nameList.Remove(newName);
-                return newName;
+                    int index = random.Next(0, nameList.Count);
+                    newName = nameList[index];
+                    if (removeFormLib)
+                        nameList.Remove(newName);
+                    return newName;
+                }
+                else
+                {
+                    return ObfuscatorHelper.GetANameFromRandomChar();
+                }
             }
 
         }
@@ -101,9 +110,9 @@ namespace Flower.UnityObfuscator
             _instance = new NameFactory();
         }
 
-        public void Load()
+        public void Load(ObfuscateNameType obfuscateNameType)
         {
-            Random random = ObfuscatorUtils.ObfuscateRandom;
+            Random random = ObfuscatorHelper.ObfuscateRandom;
 
             NameCollectionDic = new Dictionary<NameType, NameCollection>();
 
@@ -113,27 +122,41 @@ namespace Flower.UnityObfuscator
                 return;
             }
 
-            string[] strs = File.ReadAllLines(Application.dataPath + "/" + Const.NameListPath);
-            int index = 0;
-
-            int namesCountPerType = strs.Length / Enum.GetValues(typeof(NameType)).Length;
-
-            foreach (NameType v in Enum.GetValues(typeof(NameType)))
+            if (obfuscateNameType == ObfuscateNameType.NameList)
             {
-                List<string> list = new List<string>();
-                for (int i = index; i < index + namesCountPerType; i++)
-                {
-                    list.Add(strs[i]);
-                }
-                index += namesCountPerType;
+                string[] strs = File.ReadAllLines(Application.dataPath + "/" + Const.NameListPath);
+                int index = 0;
 
-                NameCollectionDic.Add(v, new NameCollection(v, list, random));
+                int namesCountPerType = strs.Length / Enum.GetValues(typeof(NameType)).Length;
+
+                foreach (NameType v in Enum.GetValues(typeof(NameType)))
+                {
+                    List<string> list = new List<string>();
+                    for (int i = index; i < index + namesCountPerType; i++)
+                    {
+                        list.Add(strs[i]);
+                    }
+                    index += namesCountPerType;
+
+                    NameCollectionDic.Add(v, new NameCollection(v, list, random));
+                }
             }
+            else
+            {
+                foreach (NameType v in Enum.GetValues(typeof(NameType)))
+                {
+                    List<string> list = new List<string>();
+                    NameCollectionDic.Add(v, new NameCollection(v, list, random));
+                }
+            }
+
+            NameCollection.ObfuscateNameType = obfuscateNameType;
+
         }
 
         private NameFactory()
         {
-            Load();
+            //Load(ObfuscateNameType.RandomChar);
         }
 
         public string GetRandomName(NameType nameType, string oldName)
