@@ -33,7 +33,7 @@ namespace Flower.UnityObfuscator
             }
             var readerParameters = new ReaderParameters { AssemblyResolver = resolver, ReadSymbols = true };
             var assembly = AssemblyDefinition.ReadAssembly(AssemblyPath, readerParameters);
-
+            var garbageCodeAssmbly = AssemblyDefinition.ReadAssembly(Const.AssemblyGarbageDllPath, readerParameters);
             if (assembly == null)
             {
                 Debug.LogError(string.Format("Code Obfuscate Load assembly failed: {0}", AssemblyPath));
@@ -49,11 +49,12 @@ namespace Flower.UnityObfuscator
                 var module = assembly.MainModule;
 
                 if (enableCodeInject)
-                    CodeInject.Instance.DoObfuscate(assembly);
+                    CodeInject.Instance.DoObfuscate(assembly, garbageCodeAssmbly);
                 if (enableNameObfuscate)
                     NameObfuscate.Instance.DoObfuscate(assembly);
 
                 assembly.Write(AssemblyPath, new WriterParameters { WriteSymbols = true });
+                Debug.Log("Code Obfuscate Completed!");
             }
             catch (Exception ex)
             {
@@ -68,11 +69,18 @@ namespace Flower.UnityObfuscator
                     assembly.MainModule.SymbolReader.Dispose();
                 }
                 assembly.MainModule.SymbolReader.Dispose();
+
+                if (garbageCodeAssmbly.MainModule.SymbolReader != null)
+                {
+                    Debug.Log("Code Obfuscate SymbolReader.Dispose Succeed");
+                    garbageCodeAssmbly.MainModule.SymbolReader.Dispose();
+                }
+                assembly.MainModule.SymbolReader.Dispose();
+
                 NameFactory.Instance.OutputNameMap(Const.NameMapPath);
             }
-            Debug.Log("Code Obfuscate Completed!");
-        }
 
+        }
 
     }
 }

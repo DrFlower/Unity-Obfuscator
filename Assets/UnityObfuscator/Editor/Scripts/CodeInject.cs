@@ -118,7 +118,7 @@ namespace Flower.UnityObfuscator
             return false;
         }
 
-        public void DoObfuscate(AssemblyDefinition assembly)
+        public void DoObfuscate(AssemblyDefinition assembly, AssemblyDefinition garbageCodeAssmbly)
         {
             var module = assembly.MainModule;
 
@@ -131,7 +131,7 @@ namespace Flower.UnityObfuscator
             try
             {
                 List<TypeDefinition> targetTypeList = new List<TypeDefinition>();
-                TypeDefinition garbageType = GetGarbageType(assembly);
+                TypeDefinition garbageType = GetGarbageType(garbageCodeAssmbly);
                 foreach (var type in module.Types)
                 {
                     if (!type.IsClass || type.IsAbstract || type.Name.StartsWith("<") || type.Name.Contains("`") || type.HasGenericParameters)
@@ -145,7 +145,6 @@ namespace Flower.UnityObfuscator
                 Dictionary<string, ClassInfo> classInfoDic = DllInfoHelper.GetTypesNameInfo(targetTypeList);
                 InsertMethodToClass(targetTypeList, garbageType, classInfoDic);
                 InsertMethodToMethod(targetTypeList, classInfoDic);
-                assembly.MainModule.Types.Remove(garbageType);
 
                 OutputNameMap(Const.InjectInfoPath);
             }

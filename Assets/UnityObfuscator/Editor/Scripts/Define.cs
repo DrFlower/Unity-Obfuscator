@@ -69,7 +69,7 @@ namespace Flower.UnityObfuscator
         public static readonly string AssemblyMdbCopyPath = "./Library/ScriptAssemblies/Assembly-CSharp_Copy.dll.mdb";
         public static readonly string AssemblyDllCopyPath = "./Library/ScriptAssemblies/Assembly-CSharp_Copy.dll";
 
-        public static readonly string AssemblyGarbageDllPath = "./Library/ScriptAssemblies/Assembly-CSharp.dll";
+        public static readonly string AssemblyGarbageDllPath = "./Library/ScriptAssemblies/GarbageCode.dll";
 
         public static readonly string[] ResolverSearchDirs = new string[]
         {

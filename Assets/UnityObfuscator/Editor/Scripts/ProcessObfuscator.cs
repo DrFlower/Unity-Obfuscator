@@ -31,9 +31,9 @@ namespace Flower.UnityObfuscator
 
                 hasObfuscated = true;
             }
-            catch (System.Exception)
+            catch (System.Exception e)
             {
-                throw new System.Exception("Unity Obfuscator Error");
+                throw new System.Exception("Unity Obfuscator Error:" + e);
             }
 
         }
