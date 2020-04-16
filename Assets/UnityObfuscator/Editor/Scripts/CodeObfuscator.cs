@@ -10,7 +10,7 @@ namespace Flower.UnityObfuscator
 {
     internal static class CodeObfuscator
     {
-        public static void DoObfuscate(string assemblyPath, int randomSeed, bool enableNameObfuscate, bool enableCodeInject,
+        public static void DoObfuscate(string assemblyPath, string uselessCodeLibAssemblyPath, int randomSeed, bool enableNameObfuscate, bool enableCodeInject,
             ObfuscateType nameObfuscateType, ObfuscateType codeInjectObfuscateType, ObfuscateNameType obfuscateNameType, int garbageMethodMultiplePerClass, int insertMethodCountPerMethod)
         {
             if (Application.isPlaying || EditorApplication.isCompiling)
@@ -33,7 +33,7 @@ namespace Flower.UnityObfuscator
             }
             var readerParameters = new ReaderParameters { AssemblyResolver = resolver, ReadSymbols = true };
             var assembly = AssemblyDefinition.ReadAssembly(AssemblyPath, readerParameters);
-            var garbageCodeAssmbly = AssemblyDefinition.ReadAssembly(Const.AssemblyGarbageDllPath, readerParameters);
+            var garbageCodeAssmbly = AssemblyDefinition.ReadAssembly(uselessCodeLibAssemblyPath, readerParameters);
             if (assembly == null)
             {
                 Debug.LogError(string.Format("Code Obfuscate Load assembly failed: {0}", AssemblyPath));

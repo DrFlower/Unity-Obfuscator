@@ -32,8 +32,14 @@ namespace Flower.UnityObfuscator
         //每个方法调用多少垃圾方法(影响性能)
         public int InsertMethodCountPerMethod = 1;
 
-        //测试混淆DLL输出路径
-        public string outputCopyDllPath;
+        //需要混淆的Dll的路径
+        public string[] obfuscateDllPaths = new string[0];
+
+        //垃圾代码库路径
+        public string uselessCodeLibPath = "";
+
+        //测试混淆输出路径
+        public string testOutputPath = "";
 
     }
 }

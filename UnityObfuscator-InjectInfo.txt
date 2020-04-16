@@ -1,0 +1,6 @@
+(System.Int32)TestA.get_FieldA() ===> jGrX
+(System.Void)TestA.set_FieldA(System.Int32) ===> jGrX
+(System.Void)TestA.MethodA() ===> rqzuZ
+(System.Int32)TestB.get_FieldB() ===> hBmez
+(System.Void)TestB.set_FieldB(System.Int32) ===> rQYnNaJ
+(System.Void)TestB.MethodB() ===> kBnw

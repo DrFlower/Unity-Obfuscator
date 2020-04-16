@@ -26,8 +26,8 @@ namespace Flower.UnityObfuscator
         {
             try
             {
-                if (doObfuscate && !hasObfuscated)
-                    DoObfuscateByConfig(Const.AssemblyDllPath);
+                //if (doObfuscate && !hasObfuscated)
+                //    DoObfuscateByConfig(Const.AssemblyDllPath);
 
                 hasObfuscated = true;
             }
@@ -75,16 +75,16 @@ namespace Flower.UnityObfuscator
             EditorUtility.SetDirty(obfuscatorConfig);
         }
 
-        public static void DoObfuscate(string assemblyDllPath, int randomSeed, bool switchNameObfuscate, bool switchCodeInject,
+        public static void DoObfuscate(string assemblyDllPath, string uselessCodeLibAssemblyPath, int randomSeed, bool switchNameObfuscate, bool switchCodeInject,
             ObfuscateType nameObfuscateType, ObfuscateType codeInjectObfuscateType, ObfuscateNameType obfuscateNameType,
             int garbageMethodMultiplePerClass, int insertMethodCountPerMethod)
         {
-            CodeObfuscator.DoObfuscate(assemblyDllPath, randomSeed, switchNameObfuscate, switchCodeInject,
+            CodeObfuscator.DoObfuscate(assemblyDllPath, uselessCodeLibAssemblyPath, randomSeed, switchNameObfuscate, switchCodeInject,
                 nameObfuscateType, codeInjectObfuscateType, obfuscateNameType, garbageMethodMultiplePerClass, insertMethodCountPerMethod);
         }
 
 
-        public static void DoObfuscateByConfig(string assemblyPath)
+        public static void DoObfuscateByConfig(string[] assemblyPath)
         {
             ObfuscatorConfig obfuscatorConfig = AssetDatabase.LoadAssetAtPath<ObfuscatorConfig>(Const.ConfigAssetPath);
 
@@ -96,6 +96,8 @@ namespace Flower.UnityObfuscator
 
             if (!obfuscatorConfig.enableCodeObfuscator)
                 return;
+
+            string uselessCodeLibAssemblyPath = obfuscatorConfig.uselessCodeLibPath;
 
             int randomSeed = obfuscatorConfig.randomSeed;
             if (obfuscatorConfig.useTimeSpan)
@@ -109,9 +111,78 @@ namespace Flower.UnityObfuscator
             int garbageMethodMultiplePerClass = obfuscatorConfig.GarbageMethodMultiplePerClass;
             int insertMethodCountPerMethod = obfuscatorConfig.InsertMethodCountPerMethod;
 
-            DoObfuscate(assemblyPath, randomSeed, enableNameObfuscate, enableCodeInject, nameObfuscateType, codeInjectObfuscateType, obfuscateNameType, garbageMethodMultiplePerClass, insertMethodCountPerMethod);
+            DoObfuscate(assemblyPath[0], uselessCodeLibAssemblyPath, randomSeed, enableNameObfuscate, enableCodeInject, nameObfuscateType, codeInjectObfuscateType, obfuscateNameType, garbageMethodMultiplePerClass, insertMethodCountPerMethod);
         }
 
+        public static void TestObfuscate()
+        {
+            ObfuscatorConfig obfuscatorConfig = AssetDatabase.LoadAssetAtPath<ObfuscatorConfig>(Const.ConfigAssetPath);
+
+            string[] pathsConfig = obfuscatorConfig.obfuscateDllPaths;
+            if (pathsConfig == null)
+            {
+                Debug.LogError("目标DLL路径为空");
+                return;
+            }
+            if (!Directory.Exists(obfuscatorConfig.testOutputPath))
+            {
+                Debug.LogError(string.Format("找不到混淆测试输出路径:{0}", obfuscatorConfig.testOutputPath));
+                return;
+            }
+
+            FileInfo[] fileInfos = new FileInfo[pathsConfig.Length];
+
+            for (int i = 0; i < pathsConfig.Length; i++)
+            {
+                string path = pathsConfig[i];
+                //有可能记录的是相对路径，这里如果找不到对应路径就找相对路径
+                path = File.Exists(path) ? path : (Application.dataPath.Substring(0, Application.dataPath.Length - 6) + path);
+                bool exists = File.Exists(path);
+
+                if (!exists)
+                {
+                    Debug.Log(string.Format("找不到混淆目标文件:{0}", path));
+                    return;
+                }
+
+                FileInfo fileInfo = new FileInfo(path);
+
+                string oringalMDBPath = fileInfo.FullName + ".mdb";
+                if (!File.Exists(oringalMDBPath))
+                {
+                    Debug.Log(string.Format("找不到该MDB文件:{0}", oringalMDBPath));
+                    return;
+                }
+
+                fileInfos[i] = fileInfo;
+            }
+
+            string[] copyDllPaths = new string[pathsConfig.Length];
+
+            for (int i = 0; i < fileInfos.Length; i++)
+            {
+                string targetPath = obfuscatorConfig.testOutputPath + "/" + fileInfos[i].Name;
+                string oringalMDBPath = fileInfos[i].FullName + ".mdb";
+                string targetMDBPath = obfuscatorConfig.testOutputPath + "/" + fileInfos[i].Name + ".mdb";
+
+                if (File.Exists(targetPath))
+                {
+                    File.Delete(targetPath);
+                }
+
+                if (File.Exists(targetMDBPath))
+                {
+                    File.Delete(targetMDBPath);
+                }
+
+
+                File.Copy(fileInfos[i].FullName, targetPath);
+                File.Copy(oringalMDBPath, targetMDBPath);
+                copyDllPaths[i] = targetPath;
+            }
+
+            ProcessObfuscator.DoObfuscateByConfig(copyDllPaths);
+        }
 
     }
 

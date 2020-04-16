@@ -21,4 +21,7 @@ MonoBehaviour:
   codeInjectType: 1
   GarbageMethodMultiplePerClass: 1
   InsertMethodCountPerMethod: 1
-  outputCopyDllPath: 
+  obfuscateDllPaths:
+  - Library/ScriptAssemblies/Assembly-CSharp.dll
+  uselessCodeLibPath: Assets/UnityObfuscator/GarbageCode/GarbageCode.dll
+  testOutputPath: C:/Users/admin/Desktop/dll copy

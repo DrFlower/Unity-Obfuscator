@@ -19,33 +19,7 @@ namespace Flower.UnityObfuscator
         private static readonly string whiteListClassNameOnlyFilePath = @"WhiteListClassNameOnly.txt";
         private static readonly string whiteListMethodFilePath = @"WhiteListMethod.txt";
 
-        /// <summary>
-        /// 该函数用于测试
-        /// 修改后的dll文件在 ./Library/ScriptAssemblies/Assembly-CSharp_Copy.dll
-        /// </summary>
-        [MenuItem("Unity Obfuscator/Test Obfuscator", false, 1)]
-        private static void TestObfuscate()
-        {
-            string assemblyOriginalPath = Const.AssemblyDllPath;
-            string assemblyMdbOriginalPath = Const.AssemblyMdbPath;
-
-            string assemblyPath = Const.AssemblyDllCopyPath;
-            string mdbPath = Const.AssemblyMdbCopyPath;
-
-            if (File.Exists(assemblyPath))
-            {
-                File.Delete(assemblyPath);
-            }
-            if (File.Exists(mdbPath))
-            {
-                File.Delete(mdbPath);
-            }
-
-            File.Copy(assemblyOriginalPath, assemblyPath);
-            File.Copy(assemblyMdbOriginalPath, mdbPath);
-
-            ProcessObfuscator.DoObfuscateByConfig(assemblyPath);
-        }
+  
 
 
         [MenuItem("Unity Obfuscator/Create Obfuscator Config Asset", false, 3)]

@@ -85,15 +85,131 @@ namespace Flower.UnityObfuscator
 
             }
 
-            //GUILayout.Space(10f);
-            //Header("路径设置");
-            //DrawLeft();
-            //GUILayout.Space(5f);
+            //DLL路径设置
+            GUILayout.Space(10f);
+            Header("DLL路径设置");
+            DrawLeft();
+            GUILayout.Space(5f);
+            for (int i = 0; i < obfuscatorConfig.obfuscateDllPaths.Length; i++)
+            {
+                DrawDllPathItem(obfuscatorConfig.obfuscateDllPaths, i);
+                GUILayout.Space(2f);
+            }
 
-            //GUILayout.Space(5f);
-            //DrawRight();
+            if (GUILayout.Button("+"))
+            {
+                AddPath();
+            }
+            GUILayout.Space(5f);
+            DrawRight();
+
+            //垃圾代码库路径
+            GUILayout.Space(10f);
+            Header("垃圾代码库路径设置");
+            DrawLeft();
+            GUILayout.Space(5f);
+            EditorGUILayout.BeginHorizontal();
+            obfuscatorConfig.uselessCodeLibPath = EditorGUILayout.TextField(obfuscatorConfig.uselessCodeLibPath);
+            if (GUILayout.Button("Browse...", new GUILayoutOption[1] { GUILayout.Width(80f) }))
+            {
+                obfuscatorConfig.uselessCodeLibPath = CheckPath(EditorUtility.OpenFilePanel("", Application.dataPath, "dll"));
+            }
+            EditorGUILayout.EndHorizontal();
+            GUILayout.Space(5f);
+            DrawRight();
+
+            //测试面板
+            GUILayout.Space(10f);
+            Header("测试");
+            DrawLeft();
+            GUILayout.Space(5f);
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("输出路径", new GUILayoutOption[1] { GUILayout.Width(50f) });
+            obfuscatorConfig.testOutputPath = EditorGUILayout.TextField(obfuscatorConfig.testOutputPath);
+            if (GUILayout.Button("Browse...", new GUILayoutOption[1] { GUILayout.Width(80f) }))
+            {
+                obfuscatorConfig.testOutputPath = CheckPath(EditorUtility.OpenFolderPanel("", Application.dataPath, "dll"));
+            }
+            EditorGUILayout.EndHorizontal();
+            GUILayout.Space(5f);
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Space(5f);
+            if (GUILayout.Button("Obfuscate", new GUILayoutOption[1] { GUILayout.Height(60f) }))
+            {
+                ProcessObfuscator.TestObfuscate();
+            }
+            GUILayout.Space(5f);
+            EditorGUILayout.EndHorizontal();
+            GUILayout.Space(5f);
+            DrawRight();
 
             EditorUtility.SetDirty(obfuscatorConfig);
+        }
+
+        private void AddPath()
+        {
+            ObfuscatorConfig obfuscatorConfig = ((ObfuscatorConfig)target);
+            string[] lastData = obfuscatorConfig.obfuscateDllPaths;
+
+            if (lastData != null && lastData.Length > 0)
+            {
+                string[] newData = new string[lastData.Length + 1];
+                for (int i = 0; i < lastData.Length; i++)
+                {
+                    newData[i] = lastData[i];
+                }
+                obfuscatorConfig.obfuscateDllPaths = newData;
+            }
+            else
+                obfuscatorConfig.obfuscateDllPaths = new string[1] { "" };
+
+        }
+
+        private void RemovePath(int index)
+        {
+            ObfuscatorConfig obfuscatorConfig = ((ObfuscatorConfig)target);
+            if (obfuscatorConfig.obfuscateDllPaths == null || index > obfuscatorConfig.obfuscateDllPaths.Length - 1)
+                return;
+
+            string[] lastData = obfuscatorConfig.obfuscateDllPaths;
+            string[] newData = new string[lastData.Length - 1];
+            for (int i = 0; i < newData.Length; i++)
+            {
+                if (i < index)
+                    newData[i] = lastData[i];
+                else
+                    newData[i] = lastData[i + 1];
+            }
+            obfuscatorConfig.obfuscateDllPaths = newData;
+
+        }
+
+        private string CheckPath(string path)
+        {
+            if (path.StartsWith(Application.dataPath.Substring(0, Application.dataPath.Length - 6)))
+            {
+                path = path.Substring(Application.dataPath.Length - 6);
+            }
+
+            return path;
+        }
+
+        private void DrawDllPathItem(string[] paths, int index)
+        {
+            ObfuscatorConfig obfuscatorConfig = ((ObfuscatorConfig)target);
+            EditorGUILayout.BeginHorizontal();
+            paths[index] = EditorGUILayout.TextField(paths[index]);
+            if (GUILayout.Button("-", new GUILayoutOption[1] { GUILayout.Width(20f) }))
+            {
+                RemovePath(index);
+            }
+            GUILayout.Space(2f);
+            if (GUILayout.Button("Browse...", new GUILayoutOption[1] { GUILayout.Width(80f) }))
+            {
+                paths[index] = CheckPath(EditorUtility.OpenFilePanel("", Application.dataPath, "dll"));
+            }
+
+            EditorGUILayout.EndHorizontal();
         }
 
         private void Header(string title, bool enable, Action<bool> setEnableAction)
