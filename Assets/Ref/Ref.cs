@@ -2,15 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Ref
+namespace Ref
 {
-    public static void RefMethodA()
-    {
-        Debug.LogError("RefMethodA");
-    }
 
-    public static void RefMethodB()
+    public class Ref
     {
-        Debug.LogError("RefMethodB");
+        public static void RefMethodA()
+        {
+            Debug.LogError("RefMethodA");
+        }
+
+        public static void RefMethodB()
+        {
+            Debug.LogError("RefMethodB");
+        }
     }
 }
+

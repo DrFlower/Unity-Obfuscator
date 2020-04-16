@@ -10,7 +10,7 @@ namespace Flower.UnityObfuscator
 {
     internal static class CodeObfuscator
     {
-        public static void DoObfuscate(string assemblyPath, string uselessCodeLibAssemblyPath, int randomSeed, bool enableNameObfuscate, bool enableCodeInject,
+        public static void DoObfuscate(string[] assemblyPath, string uselessCodeLibAssemblyPath, int randomSeed, bool enableNameObfuscate, bool enableCodeInject,
             ObfuscateType nameObfuscateType, ObfuscateType codeInjectObfuscateType, ObfuscateNameType obfuscateNameType, int garbageMethodMultiplePerClass, int insertMethodCountPerMethod)
         {
             if (Application.isPlaying || EditorApplication.isCompiling)
@@ -19,7 +19,7 @@ namespace Flower.UnityObfuscator
                 return;
             }
 
-            string AssemblyPath = assemblyPath;
+            string AssemblyPath = assemblyPath[0];
 
 
             Debug.Log("Code Obfuscate Start");
@@ -32,8 +32,14 @@ namespace Flower.UnityObfuscator
                 resolver.AddSearchDirectory(item);
             }
             var readerParameters = new ReaderParameters { AssemblyResolver = resolver, ReadSymbols = true };
-            var assembly = AssemblyDefinition.ReadAssembly(AssemblyPath, readerParameters);
-            var garbageCodeAssmbly = AssemblyDefinition.ReadAssembly(uselessCodeLibAssemblyPath, readerParameters);
+
+            AssemblyDefinition assembly = AssemblyDefinition.ReadAssembly(AssemblyPath, readerParameters);
+
+            AssemblyDefinition garbageCodeAssmbly = null;
+            if (enableCodeInject)
+                garbageCodeAssmbly = AssemblyDefinition.ReadAssembly(uselessCodeLibAssemblyPath, readerParameters);
+
+
             if (assembly == null)
             {
                 Debug.LogError(string.Format("Code Obfuscate Load assembly failed: {0}", AssemblyPath));
@@ -47,6 +53,21 @@ namespace Flower.UnityObfuscator
                 NameFactory.Instance.Load(obfuscateNameType);
 
                 var module = assembly.MainModule;
+
+                //foreach (var item in assembly.MainModule.ModuleReferences)
+                //{
+                //    Debug.LogError("ModuleReferences:" + item);
+                //}
+                //foreach (var item in assembly.MainModule.GetTypeReferences())
+                //{
+                //    Debug.LogError("GetTypeReferences:" + item);
+                //}
+
+                //foreach (var item in assembly.MainModule.GetMemberReferences())
+                //{
+                //    Debug.LogError("GetTypeReferences:" + item);
+                //}
+
 
                 if (enableCodeInject)
                     CodeInject.Instance.DoObfuscate(assembly, garbageCodeAssmbly);
@@ -63,19 +84,17 @@ namespace Flower.UnityObfuscator
             finally
             {
 
-                if (assembly.MainModule.SymbolReader != null)
+                if (assembly != null && assembly.MainModule.SymbolReader != null)
                 {
-                    Debug.Log("Code Obfuscate SymbolReader.Dispose Succeed");
                     assembly.MainModule.SymbolReader.Dispose();
                 }
-                assembly.MainModule.SymbolReader.Dispose();
 
-                if (garbageCodeAssmbly.MainModule.SymbolReader != null)
+
+                if (garbageCodeAssmbly != null && garbageCodeAssmbly.MainModule.SymbolReader != null)
                 {
-                    Debug.Log("Code Obfuscate SymbolReader.Dispose Succeed");
                     garbageCodeAssmbly.MainModule.SymbolReader.Dispose();
                 }
-                assembly.MainModule.SymbolReader.Dispose();
+
 
                 NameFactory.Instance.OutputNameMap(Const.NameMapPath);
             }

@@ -22,7 +22,7 @@ public class TestA
 
     public void MethodA()
     {
-
+        Ref.Ref.RefMethodA();
     }
 
 

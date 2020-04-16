@@ -16,7 +16,7 @@ MonoBehaviour:
   enableCodeObfuscator: 1
   obfuscateNameType: 0
   enableNameObfuscate: 1
-  enableCodeInject: 1
+  enableCodeInject: 0
   nameObfuscateType: 1
   codeInjectType: 1
   GarbageMethodMultiplePerClass: 1

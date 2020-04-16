@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestB 
+public class TestB
 {
 
     private int fieldB;
@@ -22,7 +22,6 @@ public class TestB
 
     public void MethodB()
     {
-
-
+        Ref.Ref.RefMethodB();
     }
 }
