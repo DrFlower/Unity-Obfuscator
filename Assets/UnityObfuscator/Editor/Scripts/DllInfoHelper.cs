@@ -28,7 +28,7 @@ namespace Flower.UnityObfuscator
             foreach (var t in typeList)
             {
                 tmpTR = t.BaseType;
-                while (tmpTR != null)
+                try
                 {
                     tmpTD = tmpTR.Resolve();
                     if (!classNameInfoDict.TryGetValue(tmpTD.FullName, out tmpCNI))
@@ -41,6 +41,10 @@ namespace Flower.UnityObfuscator
                     }
                     classNameInfoDict[t.FullName].nameSet.UnionWith(tmpCNI.nameSet);
                     tmpTR = tmpTD.BaseType;
+                }
+                catch
+                {
+                    break;
                 }
             }
             return classNameInfoDict;

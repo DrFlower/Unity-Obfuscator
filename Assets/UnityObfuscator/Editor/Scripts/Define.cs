@@ -63,11 +63,11 @@ namespace Flower.UnityObfuscator
 
         public static readonly string NameListPath = @"/UnityObfuscator/Editor/Res/NameList.txt";
 
-        public static readonly string AssemblyMdbPath = "./Library/ScriptAssemblies/Assembly-CSharp.dll.mdb";
-        public static readonly string AssemblyDllPath = "./Library/ScriptAssemblies/Assembly-CSharp.dll";
+        //public static readonly string AssemblyMdbPath = "./Library/ScriptAssemblies/Assembly-CSharp.dll.mdb";
+        //public static readonly string AssemblyDllPath = "./Library/ScriptAssemblies/Assembly-CSharp.dll";
 
-        public static readonly string AssemblyMdbCopyPath = "./Library/ScriptAssemblies/Assembly-CSharp_Copy.dll.mdb";
-        public static readonly string AssemblyDllCopyPath = "./Library/ScriptAssemblies/Assembly-CSharp_Copy.dll";
+        //public static readonly string AssemblyMdbCopyPath = "./Library/ScriptAssemblies/Assembly-CSharp_Copy.dll.mdb";
+        //public static readonly string AssemblyDllCopyPath = "./Library/ScriptAssemblies/Assembly-CSharp_Copy.dll";
 
         public static readonly string[] ResolverSearchDirs = new string[]
         {

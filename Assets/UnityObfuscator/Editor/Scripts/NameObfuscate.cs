@@ -30,8 +30,6 @@ namespace Flower.UnityObfuscator
             }
         }
 
-        private readonly bool useFullNameMap = false;
-
         public override void Init(ObfuscateType obfuscateType)
         {
             this.obfuscateType = obfuscateType;
@@ -141,32 +139,29 @@ namespace Flower.UnityObfuscator
         /// <param name="t"></param>
         private void ChangeFieldName(TypeDefinition t)
         {
-            // * 遍历字段
             foreach (var field in t.Fields)
             {
-                string _spaceName = t.Namespace;
-                string className = t.Name;
                 string fieldName = field.Name;
-
                 if (IsChangeField(t, fieldName))
                 {
-                    field.Name = NameFactory.Instance.GetRandomName(NameType.Filed, useFullNameMap ? string.Format("{0}|{1}|{2}", _spaceName, className, fieldName) : fieldName);
+                    field.Name = NameFactory.Instance.GetRandomName(NameType.Filed, ObfuscateItemFactory.Create(field));
                 }
             }
         }
 
+        /// <summary>
+        /// 修改属性名
+        /// </summary>
+        /// <param name="t"></param>
         private void ChangePropertyName(TypeDefinition t)
         {
-            // * 遍历属性s
             foreach (var property in t.Properties)
             {
-                string _spaceName = t.Namespace;
-                string className = t.Name;
                 string propertyName = property.Name;
 
                 if (IsChangeProperty(t, propertyName))
                 {
-                    property.Name = NameFactory.Instance.GetRandomName(NameType.Property, useFullNameMap ? string.Format("{0}|{1}|{2}", _spaceName, className, propertyName) : propertyName);
+                    property.Name = NameFactory.Instance.GetRandomName(NameType.Property, ObfuscateItemFactory.Create(property));
                 }
             }
         }
@@ -177,15 +172,10 @@ namespace Flower.UnityObfuscator
         /// <param name="t"></param>
         private void ChangeMethodName(TypeDefinition t)
         {
-            string _spaceName = t.Namespace;
-            string className = t.Name;
-            // * 遍历方法
             foreach (var method in t.Methods)
             {
-                string methodName = method.Name;
-
                 if (IsChangeMethod(t, method))
-                    method.Name = NameFactory.Instance.GetRandomName(NameType.Method, useFullNameMap ? string.Format("{0}|{1}|{2}", _spaceName, className, methodName) : methodName);
+                    method.Name = NameFactory.Instance.GetRandomName(NameType.Method, ObfuscateItemFactory.Create(method));
             }
         }
 
@@ -195,11 +185,8 @@ namespace Flower.UnityObfuscator
         /// <param name="t"></param>
         private void ChangeClassName(TypeDefinition t)
         {
-            string _spaceName = t.Namespace;
-            string className = t.Name;
-
             if (IsChangeClass(t))
-                t.Name = NameFactory.Instance.GetRandomName(NameType.Class, useFullNameMap ? string.Format("{0}|{1}", _spaceName, className) : className);
+                t.Name = NameFactory.Instance.GetRandomName(NameType.Class, ObfuscateItemFactory.Create(t));
         }
 
         /// <summary>
@@ -208,11 +195,8 @@ namespace Flower.UnityObfuscator
         /// <param name="t"></param>
         private void ChangeNamespace(TypeDefinition t)
         {
-            string spaceName = t.Namespace;
-
             if (IsChangeNamespace(t))
-                t.Namespace = NameFactory.Instance.GetRandomName(NameType.Namespace, spaceName);
-
+                t.Namespace = NameFactory.Instance.GetRandomName(NameType.Namespace, ObfuscateItemFactory.Create(t.Namespace, t.Module));
         }
 
 

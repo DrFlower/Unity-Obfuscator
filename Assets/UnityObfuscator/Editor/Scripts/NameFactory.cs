@@ -14,8 +14,8 @@ namespace Flower.UnityObfuscator
         private class NameCollection
         {
             private List<string> nameList = new List<string>();
-            private Dictionary<string, string> old_new_Dic = new Dictionary<string, string>();
-            private Dictionary<string, string> new_old_Dic = new Dictionary<string, string>();
+            private Dictionary<BaseObfuscateItem, string> old_new_Dic = new Dictionary<BaseObfuscateItem, string>();
+            private Dictionary<string, BaseObfuscateItem> new_old_Dic = new Dictionary<string, BaseObfuscateItem>();
 
             private Random random;
 
@@ -31,7 +31,7 @@ namespace Flower.UnityObfuscator
                 }
             }
 
-            public Dictionary<string, string> Old_New_NameDic
+            public Dictionary<BaseObfuscateItem, string> Old_New_NameDic
             {
                 get
                 {
@@ -39,7 +39,7 @@ namespace Flower.UnityObfuscator
                 }
             }
 
-            public Dictionary<string, string> New_Old_NameDic
+            public Dictionary<string, BaseObfuscateItem> New_Old_NameDic
             {
                 get
                 {
@@ -54,15 +54,20 @@ namespace Flower.UnityObfuscator
                 this.random = random;
             }
 
-            public string GetAName(string oldName)
+            public bool AlreadHanveRandomName(BaseObfuscateItem obfuscateItem)
+            {
+                return old_new_Dic.ContainsKey(obfuscateItem);
+            }
+
+            public string GetAName(BaseObfuscateItem obfuscateItem)
             {
                 string newName = string.Empty;
 
-                if (!old_new_Dic.TryGetValue(oldName, out newName))
+                if (!old_new_Dic.TryGetValue(obfuscateItem, out newName))
                 {
                     newName = GetAName();
-                    old_new_Dic.Add(oldName, newName);
-                    new_old_Dic.Add(newName, oldName);
+                    old_new_Dic.Add(obfuscateItem, newName);
+                    new_old_Dic.Add(newName, obfuscateItem);
                 }
 
                 return newName;
@@ -156,16 +161,27 @@ namespace Flower.UnityObfuscator
 
         private NameFactory()
         {
-            //Load(ObfuscateNameType.RandomChar);
+
         }
 
-        public string GetRandomName(NameType nameType, string oldName)
+        public bool AlreadyHaveRandomName(NameType nameType, BaseObfuscateItem obfuscateItem)
+        {
+            bool result = false;
+            if (NameCollectionDic.ContainsKey(nameType))
+            {
+                result = NameCollectionDic[nameType].AlreadHanveRandomName(obfuscateItem);
+            }
+
+            return result;
+        }
+
+        public string GetRandomName(NameType nameType, BaseObfuscateItem obfuscateItem)
         {
             string newName = string.Empty;
 
             if (NameCollectionDic.ContainsKey(nameType))
             {
-                newName = NameCollectionDic[nameType].GetAName(oldName);
+                newName = NameCollectionDic[nameType].GetAName(obfuscateItem);
             }
 
             return newName;
@@ -176,7 +192,7 @@ namespace Flower.UnityObfuscator
             return NameCollectionDic[NameType.Other].GetAName(false);
         }
 
-        public Dictionary<string, string> GetOld_New_NameDic(NameType nameType)
+        public Dictionary<BaseObfuscateItem, string> GetOld_New_NameDic(NameType nameType)
         {
             if (NameCollectionDic.ContainsKey(nameType))
                 return NameCollectionDic[nameType].Old_New_NameDic;
@@ -184,7 +200,7 @@ namespace Flower.UnityObfuscator
             return null;
         }
 
-        public Dictionary<string, string> GetNew_Old_NameDic(NameType nameType)
+        public Dictionary<string, BaseObfuscateItem> GetNew_Old_NameDic(NameType nameType)
         {
             if (NameCollectionDic.ContainsKey(nameType))
                 return NameCollectionDic[nameType].New_Old_NameDic;
@@ -205,7 +221,7 @@ namespace Flower.UnityObfuscator
                 result += str + collection.Key.ToString() + str + "\n";
                 foreach (var item in collection.Value.Old_New_NameDic)
                 {
-                    result += item.Key + " ===> " + item.Value + "\n";
+                    result += item.Key.Name + " ===> " + item.Value + "\n";
                 }
             }
 

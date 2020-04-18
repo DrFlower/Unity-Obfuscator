@@ -19,9 +19,6 @@ namespace Flower.UnityObfuscator
                 return;
             }
 
-            string AssemblyPath = assemblyPath[0];
-
-
             Debug.Log("Code Obfuscate Start");
 
 
@@ -33,18 +30,24 @@ namespace Flower.UnityObfuscator
             }
             var readerParameters = new ReaderParameters { AssemblyResolver = resolver, ReadSymbols = true };
 
-            AssemblyDefinition assembly = AssemblyDefinition.ReadAssembly(AssemblyPath, readerParameters);
+            AssemblyDefinition[] assemblies = new AssemblyDefinition[assemblyPath.Length];
+            for (int i = 0; i < assemblyPath.Length; i++)
+            {
+                var assembly = AssemblyDefinition.ReadAssembly(assemblyPath[i], readerParameters);
+
+                if (assembly == null)
+                {
+                    Debug.LogError(string.Format("Code Obfuscate Load assembly failed: {0}", assemblyPath[i]));
+                    return;
+                }
+
+                assemblies[i] = assembly;
+            }
 
             AssemblyDefinition garbageCodeAssmbly = null;
             if (enableCodeInject)
                 garbageCodeAssmbly = AssemblyDefinition.ReadAssembly(uselessCodeLibAssemblyPath, readerParameters);
 
-
-            if (assembly == null)
-            {
-                Debug.LogError(string.Format("Code Obfuscate Load assembly failed: {0}", AssemblyPath));
-                return;
-            }
             try
             {
                 ObfuscatorHelper.Init(randomSeed);
@@ -52,29 +55,107 @@ namespace Flower.UnityObfuscator
                 CodeInject.Instance.Init(codeInjectObfuscateType, garbageMethodMultiplePerClass, insertMethodCountPerMethod);
                 NameFactory.Instance.Load(obfuscateNameType);
 
-                var module = assembly.MainModule;
+                Dictionary<string, bool> isObfuscateTargetAssmbly = new Dictionary<string, bool>();
 
-                //foreach (var item in assembly.MainModule.ModuleReferences)
+                for (int i = 0; i < assemblies.Length; i++)
+                {
+                    var module = assemblies[i].MainModule;
+
+                    if (enableCodeInject)
+                        CodeInject.Instance.DoObfuscate(assemblies[i], garbageCodeAssmbly);
+                    if (enableNameObfuscate)
+                        NameObfuscate.Instance.DoObfuscate(assemblies[i]);
+
+                    isObfuscateTargetAssmbly.Add(assemblies[i].Name.Name, true);
+                }
+
+
+                //if(enableNameObfuscate)
                 //{
-                //    Debug.LogError("ModuleReferences:" + item);
-                //}
-                //foreach (var item in assembly.MainModule.GetTypeReferences())
-                //{
-                //    Debug.LogError("GetTypeReferences:" + item);
+
                 //}
 
-                //foreach (var item in assembly.MainModule.GetMemberReferences())
-                //{
-                //    Debug.LogError("GetTypeReferences:" + item);
-                //}
+                foreach (var assembly in assemblies)
+                {
 
 
-                if (enableCodeInject)
-                    CodeInject.Instance.DoObfuscate(assembly, garbageCodeAssmbly);
-                if (enableNameObfuscate)
-                    NameObfuscate.Instance.DoObfuscate(assembly);
+                    foreach (var item in assembly.MainModule.GetMemberReferences())
+                    {
+                        try
+                        {
 
-                assembly.Write(AssemblyPath, new WriterParameters { WriteSymbols = true });
+                            if (item is FieldReference)
+                            {
+                                FieldReference fieldReference = item as FieldReference;
+                                Dictionary<BaseObfuscateItem, string> dic = NameFactory.Instance.GetOld_New_NameDic(NameType.Filed);
+                                FieldObfuscateItem fieldObfuscateItem = new FieldObfuscateItem(fieldReference.DeclaringType.Namespace, fieldReference.DeclaringType.Name, fieldReference.Name);
+                                if (NameFactory.Instance.AlreadyHaveRandomName(NameType.Filed, fieldObfuscateItem))
+                                {
+                                    item.Name = NameFactory.Instance.GetRandomName(NameType.Filed, fieldObfuscateItem);
+                                }
+                            }
+                            else if (item is PropertyReference)
+                            {
+                                PropertyReference propertyReference = item as PropertyReference;
+
+                                PropertyObfuscateItem propertyObfuscateItem = new PropertyObfuscateItem(propertyReference.DeclaringType.Namespace, propertyReference.DeclaringType.Name, propertyReference.Name);
+
+                                if (NameFactory.Instance.AlreadyHaveRandomName(NameType.Property, propertyObfuscateItem))
+                                {
+                                    item.Name = NameFactory.Instance.GetRandomName(NameType.Property, propertyObfuscateItem);
+                                }
+
+
+                            }
+                            else if (item is MethodReference)
+                            {
+                                MethodReference methodReference = item as MethodReference;
+
+                                MethodObfuscateItem methodObfuscateItem = new MethodObfuscateItem(methodReference.DeclaringType.Namespace, methodReference.DeclaringType.Name, methodReference.Name);
+
+                                if (NameFactory.Instance.AlreadyHaveRandomName(NameType.Method, methodObfuscateItem))
+                                {
+                                    item.Name = NameFactory.Instance.GetRandomName(NameType.Method, methodObfuscateItem);
+                                }
+                            }
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                    }
+
+
+                    foreach (var item in assembly.MainModule.GetTypeReferences())
+                    {
+                        try
+                        {
+                            TypeDefinition typeDefinition = item.Resolve();
+                            TypeObfuscateItem typeObfuscateItem = ObfuscateItemFactory.Create(typeDefinition);
+                            NamespaceObfuscateItem namespaceObfuscateItem = ObfuscateItemFactory.Create(typeDefinition.Namespace, typeDefinition.Module);
+
+                            if (NameFactory.Instance.AlreadyHaveRandomName(NameType.Class, typeObfuscateItem))
+                            {
+                                item.Name = NameFactory.Instance.GetRandomName(NameType.Class, typeObfuscateItem);
+                            }
+                            if (NameFactory.Instance.AlreadyHaveRandomName(NameType.Namespace, namespaceObfuscateItem))
+                            {
+                                item.Namespace = NameFactory.Instance.GetRandomName(NameType.Namespace, namespaceObfuscateItem);
+                            }
+                        }
+                        catch
+                        {
+                            continue;
+                        }
+                    }
+                }
+
+
+                for (int i = 0; i < assemblies.Length; i++)
+                {
+                    assemblies[i].Write(assemblyPath[i], new WriterParameters { WriteSymbols = true });
+                }
+
                 Debug.Log("Code Obfuscate Completed!");
             }
             catch (Exception ex)
@@ -83,18 +164,15 @@ namespace Flower.UnityObfuscator
             }
             finally
             {
-
-                if (assembly != null && assembly.MainModule.SymbolReader != null)
+                for (int i = 0; i < assemblies.Length; i++)
                 {
-                    assembly.MainModule.SymbolReader.Dispose();
+                    assemblies[i].MainModule.SymbolReader.Dispose();
                 }
-
 
                 if (garbageCodeAssmbly != null && garbageCodeAssmbly.MainModule.SymbolReader != null)
                 {
                     garbageCodeAssmbly.MainModule.SymbolReader.Dispose();
                 }
-
 
                 NameFactory.Instance.OutputNameMap(Const.NameMapPath);
             }
