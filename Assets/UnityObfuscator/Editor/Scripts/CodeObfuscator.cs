@@ -19,10 +19,13 @@ namespace Flower.UnityObfuscator
                 return;
             }
 
+            if (assemblyPath.Length <= 0)
+            {
+                Debug.LogError("Obfuscate dll paths length: 0");
+            }
+
             Debug.Log("Code Obfuscate Start");
 
-
-            // 按路径读取程序集
             var resolver = new DefaultAssemblyResolver();
             foreach (var item in Const.ResolverSearchDirs)
             {
@@ -46,17 +49,26 @@ namespace Flower.UnityObfuscator
 
             AssemblyDefinition garbageCodeAssmbly = null;
             if (enableCodeInject)
+            {
                 garbageCodeAssmbly = AssemblyDefinition.ReadAssembly(uselessCodeLibAssemblyPath, readerParameters);
+
+                if (garbageCodeAssmbly == null)
+                {
+                    Debug.LogError(string.Format("Code Obfuscate Load assembly failed: {0}", uselessCodeLibAssemblyPath));
+                    return;
+                }
+            }
 
             try
             {
+                //初始化组件
                 ObfuscatorHelper.Init(randomSeed);
                 NameObfuscate.Instance.Init(nameObfuscateType);
                 CodeInject.Instance.Init(codeInjectObfuscateType, garbageMethodMultiplePerClass, insertMethodCountPerMethod);
                 NameFactory.Instance.Load(obfuscateNameType);
 
-                Dictionary<string, bool> isObfuscateTargetAssmbly = new Dictionary<string, bool>();
 
+                //混淆并注入垃圾代码
                 for (int i = 0; i < assemblies.Length; i++)
                 {
                     var module = assemblies[i].MainModule;
@@ -65,89 +77,82 @@ namespace Flower.UnityObfuscator
                         CodeInject.Instance.DoObfuscate(assemblies[i], garbageCodeAssmbly);
                     if (enableNameObfuscate)
                         NameObfuscate.Instance.DoObfuscate(assemblies[i]);
-
-                    isObfuscateTargetAssmbly.Add(assemblies[i].Name.Name, true);
                 }
 
-
-                //if(enableNameObfuscate)
-                //{
-
-                //}
-
-                foreach (var assembly in assemblies)
+                //把每个dll对其他被混淆的dll的引用名字修改为混淆后的名字
+                if (enableNameObfuscate)
                 {
-
-
-                    foreach (var item in assembly.MainModule.GetMemberReferences())
+                    foreach (var assembly in assemblies)
                     {
-                        try
+                        foreach (var item in assembly.MainModule.GetMemberReferences())
                         {
-
-                            if (item is FieldReference)
+                            try
                             {
-                                FieldReference fieldReference = item as FieldReference;
-                                Dictionary<BaseObfuscateItem, string> dic = NameFactory.Instance.GetOld_New_NameDic(NameType.Filed);
-                                FieldObfuscateItem fieldObfuscateItem = new FieldObfuscateItem(fieldReference.DeclaringType.Namespace, fieldReference.DeclaringType.Name, fieldReference.Name);
-                                if (NameFactory.Instance.AlreadyHaveRandomName(NameType.Filed, fieldObfuscateItem))
+                                if (item is FieldReference)
                                 {
-                                    item.Name = NameFactory.Instance.GetRandomName(NameType.Filed, fieldObfuscateItem);
+                                    FieldReference fieldReference = item as FieldReference;
+                                    Dictionary<BaseObfuscateItem, string> dic = NameFactory.Instance.GetOld_New_NameDic(NameType.Filed);
+                                    FieldObfuscateItem fieldObfuscateItem = new FieldObfuscateItem(fieldReference.DeclaringType.Namespace, fieldReference.DeclaringType.Name, fieldReference.Name);
+                                    if (NameFactory.Instance.AlreadyHaveRandomName(NameType.Filed, fieldObfuscateItem))
+                                    {
+                                        item.Name = NameFactory.Instance.GetRandomName(NameType.Filed, fieldObfuscateItem);
+                                    }
+                                }
+                                else if (item is PropertyReference)
+                                {
+                                    PropertyReference propertyReference = item as PropertyReference;
+
+                                    PropertyObfuscateItem propertyObfuscateItem = new PropertyObfuscateItem(propertyReference.DeclaringType.Namespace, propertyReference.DeclaringType.Name, propertyReference.Name);
+
+                                    if (NameFactory.Instance.AlreadyHaveRandomName(NameType.Property, propertyObfuscateItem))
+                                    {
+                                        item.Name = NameFactory.Instance.GetRandomName(NameType.Property, propertyObfuscateItem);
+                                    }
+
+
+                                }
+                                else if (item is MethodReference)
+                                {
+                                    MethodReference methodReference = item as MethodReference;
+
+                                    MethodObfuscateItem methodObfuscateItem = new MethodObfuscateItem(methodReference.DeclaringType.Namespace, methodReference.DeclaringType.Name, methodReference.Name);
+
+                                    if (NameFactory.Instance.AlreadyHaveRandomName(NameType.Method, methodObfuscateItem))
+                                    {
+                                        item.Name = NameFactory.Instance.GetRandomName(NameType.Method, methodObfuscateItem);
+                                    }
                                 }
                             }
-                            else if (item is PropertyReference)
+                            catch
                             {
-                                PropertyReference propertyReference = item as PropertyReference;
-
-                                PropertyObfuscateItem propertyObfuscateItem = new PropertyObfuscateItem(propertyReference.DeclaringType.Namespace, propertyReference.DeclaringType.Name, propertyReference.Name);
-
-                                if (NameFactory.Instance.AlreadyHaveRandomName(NameType.Property, propertyObfuscateItem))
-                                {
-                                    item.Name = NameFactory.Instance.GetRandomName(NameType.Property, propertyObfuscateItem);
-                                }
-
-
-                            }
-                            else if (item is MethodReference)
-                            {
-                                MethodReference methodReference = item as MethodReference;
-
-                                MethodObfuscateItem methodObfuscateItem = new MethodObfuscateItem(methodReference.DeclaringType.Namespace, methodReference.DeclaringType.Name, methodReference.Name);
-
-                                if (NameFactory.Instance.AlreadyHaveRandomName(NameType.Method, methodObfuscateItem))
-                                {
-                                    item.Name = NameFactory.Instance.GetRandomName(NameType.Method, methodObfuscateItem);
-                                }
+                                continue;
                             }
                         }
-                        catch
+
+                        foreach (var item in assembly.MainModule.GetTypeReferences())
                         {
-                            continue;
+                            try
+                            {
+                                TypeDefinition typeDefinition = item.Resolve();
+                                TypeObfuscateItem typeObfuscateItem = ObfuscateItemFactory.Create(typeDefinition);
+                                NamespaceObfuscateItem namespaceObfuscateItem = ObfuscateItemFactory.Create(typeDefinition.Namespace, typeDefinition.Module);
+
+                                if (NameFactory.Instance.AlreadyHaveRandomName(NameType.Class, typeObfuscateItem))
+                                {
+                                    item.Name = NameFactory.Instance.GetRandomName(NameType.Class, typeObfuscateItem);
+                                }
+                                if (NameFactory.Instance.AlreadyHaveRandomName(NameType.Namespace, namespaceObfuscateItem))
+                                {
+                                    item.Namespace = NameFactory.Instance.GetRandomName(NameType.Namespace, namespaceObfuscateItem);
+                                }
+                            }
+                            catch
+                            {
+                                continue;
+                            }
                         }
                     }
 
-
-                    foreach (var item in assembly.MainModule.GetTypeReferences())
-                    {
-                        try
-                        {
-                            TypeDefinition typeDefinition = item.Resolve();
-                            TypeObfuscateItem typeObfuscateItem = ObfuscateItemFactory.Create(typeDefinition);
-                            NamespaceObfuscateItem namespaceObfuscateItem = ObfuscateItemFactory.Create(typeDefinition.Namespace, typeDefinition.Module);
-
-                            if (NameFactory.Instance.AlreadyHaveRandomName(NameType.Class, typeObfuscateItem))
-                            {
-                                item.Name = NameFactory.Instance.GetRandomName(NameType.Class, typeObfuscateItem);
-                            }
-                            if (NameFactory.Instance.AlreadyHaveRandomName(NameType.Namespace, namespaceObfuscateItem))
-                            {
-                                item.Namespace = NameFactory.Instance.GetRandomName(NameType.Namespace, namespaceObfuscateItem);
-                            }
-                        }
-                        catch
-                        {
-                            continue;
-                        }
-                    }
                 }
 
 
@@ -174,6 +179,7 @@ namespace Flower.UnityObfuscator
                     garbageCodeAssmbly.MainModule.SymbolReader.Dispose();
                 }
 
+                //输出 名字-混淆后名字 的map
                 NameFactory.Instance.OutputNameMap(Const.NameMapPath);
             }
 

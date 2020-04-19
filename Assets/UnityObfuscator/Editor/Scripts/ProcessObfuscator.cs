@@ -43,38 +43,6 @@ namespace Flower.UnityObfuscator
 
         }
 
-        //public static void EditorObfuscatorConfig(bool enableObfuscator, bool switchNameObfuscate, bool switchCodeInject,
-        //    int nameObfuscateType, int codeInjectObfuscateType,
-        //    int garbageMethodMultiplePerClass, int insertMethodCountPerMethod)
-        //{
-        //    EditorObfuscatorConfig(enableObfuscator, (int)DateTime.Now.Ticks, switchNameObfuscate, switchCodeInject,
-        //        nameObfuscateType, codeInjectObfuscateType, garbageMethodMultiplePerClass, insertMethodCountPerMethod);
-        //}
-        ////混淆总开关、随机种子、开启名字混淆、开启垃圾代码插入、名字混淆方式（特定范围or白名单）、插入垃圾代码方式（特定范围or白名单）、生成垃圾方法的倍数、每个方法里调用垃圾方法的数量
-        //public static void EditorObfuscatorConfig(bool enableObfuscator, int randomSeed, bool enableNameObfuscate, bool enableCodeInject,
-        //    int nameObfuscateType, int codeInjectObfuscateType,
-        //    int garbageMethodMultiplePerClass, int insertMethodCountPerMethod)
-        //{
-        //    ObfuscatorConfig obfuscatorConfig = AssetDatabase.LoadAssetAtPath<ObfuscatorConfig>(Const.ConfigAssetPath);
-
-        //    if (obfuscatorConfig == null)
-        //    {
-        //        Debug.Log(Const.ConfigAssetPath + "不存在");
-        //        return;
-        //    }
-
-        //    obfuscatorConfig.enableCodeObfuscator = enableObfuscator;
-        //    obfuscatorConfig.randomSeed = randomSeed;
-        //    obfuscatorConfig.enableNameObfuscate = enableNameObfuscate;
-        //    obfuscatorConfig.enableCodeInject = enableCodeInject;
-        //    obfuscatorConfig.nameObfuscateType = (ObfuscateType)nameObfuscateType;
-        //    obfuscatorConfig.codeInjectType = (ObfuscateType)codeInjectObfuscateType;
-        //    obfuscatorConfig.GarbageMethodMultiplePerClass = garbageMethodMultiplePerClass;
-        //    obfuscatorConfig.InsertMethodCountPerMethod = insertMethodCountPerMethod;
-
-        //    EditorUtility.SetDirty(obfuscatorConfig);
-        //}
-
         private static void DoObfuscate(string[] assemblyDllPath, string uselessCodeLibAssemblyPath, int randomSeed, bool switchNameObfuscate, bool switchCodeInject,
             ObfuscateType nameObfuscateType, ObfuscateType codeInjectObfuscateType, ObfuscateNameType obfuscateNameType,
             int garbageMethodMultiplePerClass, int insertMethodCountPerMethod)

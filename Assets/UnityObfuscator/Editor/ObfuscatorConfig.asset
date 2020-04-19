@@ -14,15 +14,13 @@ MonoBehaviour:
   randomSeed: 123
   useTimeSpan: 1
   enableCodeObfuscator: 1
-  obfuscateNameType: 1
+  obfuscateNameType: 0
   enableNameObfuscate: 1
   enableCodeInject: 0
   nameObfuscateType: 1
   codeInjectType: 1
   GarbageMethodMultiplePerClass: 1
   InsertMethodCountPerMethod: 1
-  obfuscateDllPaths:
-  - Library/ScriptAssemblies/Assembly-CSharp.dll
-  - Library/ScriptAssemblies/Ref.dll
+  obfuscateDllPaths: []
   uselessCodeLibPath: Assets/UnityObfuscator/GarbageCode/GarbageCode.dll
-  testOutputPath: "C:/Users/\u672A\u95FB\u82B1\u540D/Desktop/\u65B0\u5EFA\u6587\u4EF6\u5939"
+  testOutputPath: 

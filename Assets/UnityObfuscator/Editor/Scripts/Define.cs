@@ -39,7 +39,9 @@ namespace Flower.UnityObfuscator
 
     internal class Const
     {
-        //----------------------------------------------------------------------
+        /// <summary>
+        /// 插件配置文件路径
+        /// </summary>
         public static readonly string ConfigAssetPath = @"Assets/UnityObfuscator/Editor/ObfuscatorConfig.asset";
 
         //白名单配置文件路径
@@ -63,12 +65,6 @@ namespace Flower.UnityObfuscator
 
         public static readonly string NameListPath = @"/UnityObfuscator/Editor/Res/NameList.txt";
 
-        //public static readonly string AssemblyMdbPath = "./Library/ScriptAssemblies/Assembly-CSharp.dll.mdb";
-        //public static readonly string AssemblyDllPath = "./Library/ScriptAssemblies/Assembly-CSharp.dll";
-
-        //public static readonly string AssemblyMdbCopyPath = "./Library/ScriptAssemblies/Assembly-CSharp_Copy.dll.mdb";
-        //public static readonly string AssemblyDllCopyPath = "./Library/ScriptAssemblies/Assembly-CSharp_Copy.dll";
-
         public static readonly string[] ResolverSearchDirs = new string[]
         {
             @"/Applications/Unity/Unity.app/Contents/Managed/UnityEngine",
@@ -78,10 +74,25 @@ namespace Flower.UnityObfuscator
         };
 
         public static readonly char[] randomCharArray = { '_', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
-        public static readonly int minRandomNameLen = 4;
-        public static readonly int maxRandomNameLen = 8;
 
+        /// <summary>
+        /// 使用随机字符混淆时，命名最小长度
+        /// </summary>
+        public static readonly int minRandomNameLen = 4;
+
+        /// <summary>
+        /// 使用随机字符混淆时，命名最大长度
+        /// </summary>
+        public static readonly int maxRandomNameLen = 10;
+
+        /// <summary>
+        /// 垃圾代码库命名空间
+        /// </summary>
         public static readonly string GarbageCode_Namespace = "GarbageCodeLib";
+
+        /// <summary>
+        /// 垃圾代码库类
+        /// </summary>
         public static readonly string GarbageCode_Type = "GarbageCode";
     }
 
