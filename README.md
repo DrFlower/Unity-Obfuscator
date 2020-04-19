@@ -82,7 +82,7 @@
 >> ObfuscateList-CodeInject-Class.txt &nbsp; ``//名单内的类都会调用垃圾代码``  
 >> ObfuscateList-CodeInject-Method.txt &nbsp; ``//名单内的方法都会调用垃圾代码``  
 >> ObfuscateList-CodeInject-Namespace.txt &nbsp; ``//名单内的命名空间里的内容包括（命名空间名、类名、类成员名）都会调用垃圾代码``  
-
+>> 
 >> ObfuscateList-NameObfuscate-Class.txt &nbsp; ``//名单内的类（包括类名和类成员名）都会被混淆``  
 >> ObfuscateList-NameObfuscate-ClassExceptClassName.txt &nbsp; ``//名单内的类的类成员名会被混淆，但类名不混淆``  
 >> ObfuscateList-NameObfuscate-ClassMember.txt &nbsp; ``//名单内的类成员名会被混淆``  
@@ -94,7 +94,7 @@
 >> WhiteList-CodeInject-Class.txt &nbsp; ``//名单内的类不调用垃圾代码``  
 >> WhiteList-CodeInject-Method.txt &nbsp; ``//名单内的方法不调用垃圾代码``  
 >> WhiteList-CodeInject-Namespace.txt &nbsp; ``//名单内的命名空间里内容（包括命名空间名、类名、类成员名）都不调用垃圾代码``    
-
+>> 
 >> WhiteList-NameObfuscate-Class.txt &nbsp; ``//名单内的类（包括类名和类成员）不混淆``  
 >> WhiteList-NameObfuscate-ClassMember.txt &nbsp; ``//名单内的类成员不混淆``  
 >> WhiteList-NameObfuscate-ClassNameOnly.txt &nbsp; ``//名单内的类的类名不混淆，但类成员混淆``  
