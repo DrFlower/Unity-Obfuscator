@@ -43,7 +43,7 @@
 
  - Enable Code Obfuscator控制总混淆开关
  - 可在Random Seed输入混淆用的随机种子的值，也可以勾选Use Time Stamp使用时间戳作为随机种子
- - 可分别控制**命名混淆(Obfuscate Name)**/**代码注入(Inject Code)**的开关
+ - 可分别控制**命名混淆(Obfuscate Name)** / **代码注入(Inject Code)** 的开关
  - 命名混淆
     - Filter Type: 命名混淆用的黑白名单模式，模式区别具体看下文黑白名单配置
     - Name Source：命名来源，可选Random和Word Library两个模式，Random为随机字符串命名，Word Library为从词库中抽取名字作为命名
