@@ -11,8 +11,8 @@ namespace Flower.UnityObfuscator
     {
         private static readonly float backgroundSpaceWidth = 5f;
         private GUIStyle box;
-        private string[] ObfuscateTypeStr = new string[] { "特定范围", "白名单", "两者并用" };
-        private string[] ObfuscateNameTypeStr = new string[] { "随机字符", "词库" };
+        private string[] ObfuscateTypeStr = new string[] { "Blacklist", "Whitelist", "Both" };
+        private string[] ObfuscateNameTypeStr = new string[] { "Random", "Word Library" };
 
         public override void OnInspectorGUI()
         {
@@ -38,47 +38,47 @@ namespace Flower.UnityObfuscator
                 EditorGUILayout.BeginHorizontal();
                 using (new EditorGUI.DisabledGroupScope(obfuscatorConfig.useTimeSpan))
                 {
-                    EditorGUILayout.LabelField("随机种子", new GUILayoutOption[1] { GUILayout.Width(50f) });
+                    EditorGUILayout.LabelField("Random Seed", new GUILayoutOption[1] { GUILayout.Width(100f) });
                     obfuscatorConfig.randomSeed = EditorGUILayout.IntField(obfuscatorConfig.randomSeed);
                 }
 
-                obfuscatorConfig.useTimeSpan = EditorGUILayout.ToggleLeft("使用时间作为随机种子", obfuscatorConfig.useTimeSpan);
+                obfuscatorConfig.useTimeSpan = EditorGUILayout.ToggleLeft("Use Time Stamp", obfuscatorConfig.useTimeSpan);
 
                 EditorGUILayout.EndHorizontal();
 
                 GUILayout.Space(5f);
 
-                Header("混淆名字", obfuscatorConfig.enableNameObfuscate, (enable) => obfuscatorConfig.enableNameObfuscate = enable);
+                Header("Obfuscate Name", obfuscatorConfig.enableNameObfuscate, (enable) => obfuscatorConfig.enableNameObfuscate = enable);
                 using (new EditorGUI.DisabledGroupScope(!obfuscatorConfig.enableNameObfuscate))
                 {
                     DrawLeft();
                     GUILayout.Space(5f);
                     EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.LabelField("混淆方式", new GUILayoutOption[1] { GUILayout.Width(50f) });
+                    EditorGUILayout.LabelField("Filter Type", new GUILayoutOption[1] { GUILayout.Width(80f) });
                     obfuscatorConfig.nameObfuscateType = (ObfuscateType)EditorGUILayout.Popup((int)obfuscatorConfig.nameObfuscateType, ObfuscateTypeStr);
                     EditorGUILayout.EndHorizontal();
                     GUILayout.Space(5f);
                     EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.LabelField("名字来源", new GUILayoutOption[1] { GUILayout.Width(50f) });
+                    EditorGUILayout.LabelField("Name Source", new GUILayoutOption[1] { GUILayout.Width(80f) });
                     obfuscatorConfig.obfuscateNameType = (ObfuscateNameType)EditorGUILayout.Popup((int)obfuscatorConfig.obfuscateNameType, ObfuscateNameTypeStr);
                     EditorGUILayout.EndHorizontal();
                     GUILayout.Space(5f);
                     DrawRight();
                 }
 
-                Header("插入垃圾代码", obfuscatorConfig.enableCodeInject, (enable) => obfuscatorConfig.enableCodeInject = enable);
+                Header("Inject Code", obfuscatorConfig.enableCodeInject, (enable) => obfuscatorConfig.enableCodeInject = enable);
                 using (new EditorGUI.DisabledGroupScope(!obfuscatorConfig.enableCodeInject))
                 {
                     DrawLeft();
                     GUILayout.Space(5f);
                     EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.LabelField("混淆方式", new GUILayoutOption[1] { GUILayout.Width(50f) });
+                    EditorGUILayout.LabelField("Filter Type", new GUILayoutOption[1] { GUILayout.Width(80f) });
                     obfuscatorConfig.codeInjectType = (ObfuscateType)EditorGUILayout.Popup((int)obfuscatorConfig.codeInjectType, ObfuscateTypeStr);
                     EditorGUILayout.EndHorizontal();
                     GUILayout.Space(2f);
-                    obfuscatorConfig.GarbageMethodMultiplePerClass = EditorGUILayout.IntField(new GUIContent("生成垃圾方法倍数"), obfuscatorConfig.GarbageMethodMultiplePerClass);
+                    obfuscatorConfig.GarbageMethodMultiplePerClass = EditorGUILayout.IntField(new GUIContent("Generate Useless Method Multiple"), obfuscatorConfig.GarbageMethodMultiplePerClass);
                     GUILayout.Space(2f);
-                    obfuscatorConfig.InsertMethodCountPerMethod = EditorGUILayout.IntField(new GUIContent("调用垃圾方法数量"), obfuscatorConfig.InsertMethodCountPerMethod);
+                    obfuscatorConfig.InsertMethodCountPerMethod = EditorGUILayout.IntField(new GUIContent("Call Useless Method Per Method"), obfuscatorConfig.InsertMethodCountPerMethod);
                     GUILayout.Space(5f);
                     DrawRight();
                 }
@@ -87,7 +87,7 @@ namespace Flower.UnityObfuscator
 
             //DLL路径设置
             GUILayout.Space(10f);
-            Header("DLL路径设置");
+            Header("DLL Path Setting");
             DrawLeft();
             GUILayout.Space(5f);
             for (int i = 0; i < obfuscatorConfig.obfuscateDllPaths.Length; i++)
@@ -105,7 +105,7 @@ namespace Flower.UnityObfuscator
 
             //垃圾代码库路径
             GUILayout.Space(10f);
-            Header("垃圾代码库路径设置");
+            Header("Useless Code Library Path");
             DrawLeft();
             GUILayout.Space(5f);
             EditorGUILayout.BeginHorizontal();
@@ -120,11 +120,11 @@ namespace Flower.UnityObfuscator
 
             //测试面板
             GUILayout.Space(10f);
-            Header("测试");
+            Header("Test");
             DrawLeft();
             GUILayout.Space(5f);
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("输出路径", new GUILayoutOption[1] { GUILayout.Width(50f) });
+            EditorGUILayout.LabelField("Output Path", new GUILayoutOption[1] { GUILayout.Width(80f) });
             obfuscatorConfig.testOutputPath = EditorGUILayout.TextField(obfuscatorConfig.testOutputPath);
             if (GUILayout.Button("Browse...", new GUILayoutOption[1] { GUILayout.Width(80f) }))
             {
