@@ -29,9 +29,11 @@
 3. 在原代码中插入对垃圾代码的调用
 
 ## 特色功能：
-1. 命名混淆支持词库抽取名字
+1. 命名混淆支持随机字符串或从词库抽取名字
 2. 支持随机种子，可实现重复Build后混淆结果一致
 3. 支持黑白名单，排除部分在混淆后不能正常工作的代码，确保项目正常运行
+4. 混淆后输出混淆前后的名字对应关系文件
+5. 支持多DLL
 
 ## 使用方法：
 使用时请把UnityObfuscator文件夹放置到Unity工程Assets目录下，在Unity Editor中对Assets\UnityObfuscator\Editor\ObfuscatorConfig.asset文件进行配置，并针对项目具体情况对黑白名单进行配置，配置完后直接Build程序即可生效。
@@ -40,10 +42,23 @@
 ![ObfuscatorConfig图片][1]
 
  - Enable Code Obfuscator控制总混淆开关
- - 可选择使用时间戳作为随机种子或自行控制随机种子
- - 可分别控制**混淆名字**/**垃圾代码**的开关
- - 可分别控制**混淆名字**/**垃圾代码**使用的**黑白名单模式**
- - 可控制生成垃圾方法数量和调用垃圾方法数量（谨慎设置，会对Build的速度以及程序运行速度产生影响，影响大小随垃圾代码库变化）
+ - 可在Random Seed输入混淆用的随机种子的值，也可以勾选Use Time Stamp使用时间戳作为随机种子
+ - 可分别控制**命名混淆(Obfuscate Name)**/**代码注入(Inject Code)**的开关
+ - 命名混淆
+    - Filter Type: 命名混淆用的黑白名单模式，模式区别具体看下文黑白名单配置
+    - Name Source：命名来源，可选Random和Word Library两个模式，Random为随机字符串命名，Word Library为从词库中抽取名字作为命名
+ - 代码注入
+    - Filter Type: 代码注入用的黑白名单模式，模式区别具体看下文黑白名单配置
+    - Generate Useless Method Multiple: 生成垃圾方法的倍数。例如填2，A类内原本有3个方法，则会生成6个垃圾方法在此类中``（注意垃圾代码生成不受黑白名单影响，只要开启了代码注入，就会根据这个参数在所有类中插入垃圾代码）``
+    - Call Useless Method Per Method: 在每个方法中插入对垃圾代码的调用的数量。例如填1，则每个方法会随机调用1个垃圾方法``(若无特殊需求，谨慎使用，可填0。调用垃圾方法可能会对程序运行性能产生明显影响，具体影响大小由插入数量和垃圾代码库中方法复杂度决定，受黑白名单控制，建议用黑名单模式，仅在性能不敏感的地方插入调用)``
+ - Useless Code Library Path: 垃圾代码库路径，默认为Assets/UnityObfuscator/GarbageCode/GarbageCode.dll
+ - DLL Path Setting: 需要混淆的DLL的路径，Unity默认生成的DLL在工程目录下的Library/ScriptAssemblies路径中，默认程序集为Assembly-CSharp.dll。``(若项目存在多个DLL，且存在情况：A.dll被混淆，B.dll需要调用A.dll的代码，则B.dll也必须添加到混淆列表中，以修改掉调用的名字，若B.dll本身不需要被混淆则可通过黑白名单来控制)``
+ - Test: 提供直接混淆功能，无需Build就可以输出混淆后文件，提高调试效率，混淆后文件输出到Output Path中
+
+
+>- 命名混淆中Name Source的Word Library的词库文件路径为UnityObfuscator/Editor/Res/NameList.txt，可自行替换词库，按每个名字一行的格式即可，注意词库中的名字**不能重复**
+>- 若需要使用代码注入功能，请自行准备垃圾代码库，本插件提供了默认的垃圾代码库模版，只作演示
+
 
 ## 黑白名单配置：
 
@@ -130,7 +145,12 @@
 
 
 ## 垃圾代码库配置：
-（待完善）
+插件提供了默认的垃圾代码库模版,文件位于Assets/UnityObfuscator/GarbageCode/GarbageCode.dll，里面包含了几个简单的方法，仅作功能演示用，建议需要代码注入功能的请自行准备垃圾代码库。  
+垃圾代码库建立应遵循以下规则：  
+ - 需要打成DLL文件，且带上.mdb文件在同级目录，若库文件在Unity工程内，应该只勾选Editor平台，避免垃圾库自身被发布出去
+ - 垃圾方法应该都处于GarbageCodeLib命名空间下的GarbageCode类下，当然也可以在Define脚本中修改这两个命名
+ - 垃圾方法应该声明为public static的，且无参数
+ - 垃圾方法内部不能调用方法外任何自定义类、类成员等。
 
 ## 混淆结果的验证：
 ![ILSpy图片][2]
@@ -139,11 +159,6 @@
 
 ## Demo
 Demo链接：https://github.com/DrFlower/Unity-Obfuscator-demo
-
-## TODO
-- [ ] 完善插入垃圾代码功能
-- [X] 命名混淆支持随机字符
-- [ ] 支持多DLL
 
 
   [1]: https://github.com/DrFlower/Unity-Obfuscator/blob/master/Doc/ObfuscatorConfig.png
