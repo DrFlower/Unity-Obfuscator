@@ -60,4 +60,3 @@ crashlytics-build.properties
 
 UnityObfuscator-Name_Obfuscate_Map.txt
 UnityPackageManager/
-*.meta
